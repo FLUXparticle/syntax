@@ -3,7 +3,7 @@ package de.fluxparticle.syntax.structure;
 /**
  * Created by sreinck on 03.01.16.
  */
-public class Loop extends TokenElement {
+public class Loop extends SingleElement {
 
     private final Element element;
 

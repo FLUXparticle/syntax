@@ -3,7 +3,7 @@ package de.fluxparticle.syntax.structure;
 /**
  * Created by sreinck on 03.01.16.
  */
-public class Union extends TokenElement {
+public class Union extends SingleElement {
 
     private final boolean nothing;
 

@@ -2,9 +2,7 @@ package de.fluxparticle.syntax.parser;
 
 import de.fluxparticle.syntax.lexer.*;
 
-import java.util.Collections;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by sreinck on 05.01.16.
@@ -15,19 +13,21 @@ public class Lexer extends BaseLexer {
 
     private final Scanner sc;
 
+    private final SortedSet<String> literals;
+
     private final RuleParser[] tokenParsers;
 
     private LineLexer lineLexer;
 
     private LexerElement next;
 
-    public Lexer(String input, RuleParser... tokenParsers) {
-        this(new Scanner(input), tokenParsers);
-    }
-
-    public Lexer(Scanner sc, RuleParser... tokenParsers) {
+    public Lexer(Scanner sc, Set<String> literals, RuleParser... tokenParsers) {
         this.sc = sc;
+        this.literals = new TreeSet<>(Comparator.comparing(String::length).reversed().thenComparing(Comparator.naturalOrder()));
         this.tokenParsers = tokenParsers;
+
+        this.literals.addAll(literals);
+
         nextLine();
     }
 
@@ -88,11 +88,21 @@ public class Lexer extends BaseLexer {
             }
         }
 
-        try {
-            lineLexer.check(ch);
-        } catch (ParserException e) {
-            // empty
-            throw new RuntimeException(e);
+        String tail = input().substring(lineLexer.pos());
+
+        for (String literal : literals) {
+            if (tail.startsWith(literal)) {
+                ch = new LexerToken(null, literal);
+            }
+        }
+
+        for (char c : ch.toString().toCharArray()) {
+            try {
+                lineLexer.check(new LexerSymbol(c));
+            } catch (ParserException e) {
+                // empty
+                throw new RuntimeException(e);
+            }
         }
 
         if (ch instanceof LexerSymbol && ((LexerSymbol) ch).getSymbol() == ' ') {

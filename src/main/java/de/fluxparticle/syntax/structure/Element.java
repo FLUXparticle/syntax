@@ -39,10 +39,6 @@ public abstract class Element {
         return new Union(true, element);
     }
 
-    public static Token token(String name, SingleElement... elements) {
-        return new Token(name, elements);
-    }
-
     public static  Union unionEmpty(Element... elements) {
         return new Union(true, elements);
     }

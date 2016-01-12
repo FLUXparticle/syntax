@@ -3,7 +3,7 @@ package de.fluxparticle.syntax.structure;
 /**
  * Created by sreinck on 11.01.16.
  */
-public class Keyword extends TokenElement {
+public class Keyword extends SingleElement {
 
     private final String keyword;
 

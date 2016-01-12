@@ -9,6 +9,8 @@ public interface ElementVisitor<R, D> {
 
     R visitLiteral(char literal, D data);
 
+    R visitMultiLiteral(String literal, D data);
+
     R visitKeyword(String keyword, D data);
 
     R visitRangeLiteral(char from, char to, D data);

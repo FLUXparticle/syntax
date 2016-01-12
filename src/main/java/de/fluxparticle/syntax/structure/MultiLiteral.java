@@ -1,19 +1,19 @@
 package de.fluxparticle.syntax.structure;
 
 /**
- * Created by sreinck on 03.01.16.
+ * Created by sreinck on 11.01.16.
  */
-public class Literal extends SingleElement {
+public class MultiLiteral extends SingleElement {
 
-    private final char literal;
+    private final String literal;
 
-    public Literal(char literal) {
+    public MultiLiteral(String literal) {
         this.literal = literal;
     }
 
     @Override
     public <R, D> R accept(ElementVisitor<R, D> visitor, D data) {
-        return visitor.visitLiteral(literal, data);
+        return visitor.visitMultiLiteral(literal, data);
     }
 
     @Override

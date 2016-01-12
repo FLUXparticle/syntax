@@ -15,7 +15,8 @@ public enum BNFSyntax implements Syntax {
     SINGLE_LITERAL(lit('\''), rangeLit((char) 32, (char) 126), lit('\'')) {
         @Override
         public Object reduce(Object... objects) {
-            return new Literal(objects[1].toString().charAt(0));
+            LexerSymbol symbol = (LexerSymbol) objects[1];
+            return new Literal(symbol.getSymbol());
         }
     },
 
@@ -28,7 +29,21 @@ public enum BNFSyntax implements Syntax {
         }
     },
 
-    LITERAL(union(ref("SINGLE_LITERAL"), ref("RANGE_LITERAL"))),
+    MULTI_LITERAL(lit('"'), loop(union(lit('!'), rangeLit((char) 35, (char) 126))), lit('"')) {
+        @Override
+        public Object reduce(Object... objects) {
+            List list = (List) objects[1];
+
+            StringBuilder sb = new StringBuilder();
+            for (Object o : list) {
+                sb.append(o);
+            }
+
+            return new MultiLiteral(sb.toString());
+        }
+    },
+
+    LITERAL(union(ref("SINGLE_LITERAL"), ref("RANGE_LITERAL"), ref("MULTI_LITERAL"))),
 
     NAME(rangeLit('A', 'Z'), loopEmpty(union(rangeLit('A', 'Z'), lit('_')))) {
         @Override
@@ -46,10 +61,10 @@ public enum BNFSyntax implements Syntax {
         }
     },
 
-    KEYWORD(loop(rangeLit('a', 'z'))) {
+    KEYWORD(lit(':'), loop(union(rangeLit('A', 'Z'), rangeLit('a', 'z'))), lit(':')) {
         @Override
         public Object reduce(Object... objects) {
-            List list = (List) objects[0];
+            List list = (List) objects[1];
 
             StringBuilder sb = new StringBuilder();
             for (Object o : list) {
