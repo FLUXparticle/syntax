@@ -1,10 +1,8 @@
 package de.fluxparticle.syntax.lexer;
 
-import de.fluxparticle.syntax.structure.Element;
-import de.fluxparticle.syntax.structure.ElementVisitor;
-import de.fluxparticle.syntax.structure.Literal;
-import de.fluxparticle.syntax.structure.SingleElement;
+import de.fluxparticle.syntax.structure.*;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
 
