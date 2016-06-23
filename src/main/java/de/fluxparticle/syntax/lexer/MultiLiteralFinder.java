@@ -2,7 +2,6 @@ package de.fluxparticle.syntax.lexer;
 
 import de.fluxparticle.syntax.structure.*;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
 
