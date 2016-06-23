@@ -11,7 +11,7 @@ public class Rule {
 
     private final boolean token;
 
-    private final Function<Object[], Object> reduce;
+    private Function<Object[], Object> reduce;
 
     private final SingleElement[] elements;
 
@@ -49,6 +49,10 @@ public class Rule {
 
     public boolean isToken() {
         return token;
+    }
+
+    public void setReduce(Function<Object[], Object> reduce) {
+        this.reduce = reduce;
     }
 
 }
