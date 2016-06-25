@@ -23,11 +23,12 @@ public class LineLexer extends BaseLexer {
         return new LexerSymbol(input.charAt(pos));
     }
 
-    public void check(LexerElement obj) throws ParserException {
-        if (peek().equals(obj)) {
+    public boolean check(LexerElement ch) {
+        if (peek().equals(ch)) {
             pos++;
+            return true;
         } else {
-            throw error(Collections.singleton(obj));
+            return false;
         }
     }
 

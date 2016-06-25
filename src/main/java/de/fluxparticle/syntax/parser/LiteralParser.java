@@ -1,9 +1,9 @@
 package de.fluxparticle.syntax.parser;
 
 import de.fluxparticle.syntax.lexer.*;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -11,27 +11,21 @@ import java.util.Set;
  */
 public class LiteralParser extends Parser {
 
-    private final char literal;
+    private final LexerSymbol lexerSymbol;
 
     public LiteralParser(char literal) {
-        this.literal = literal;
+        lexerSymbol = new LexerSymbol(literal);
     }
 
     @Override
     Set<LexerElement> first() {
-        return Collections.singleton(new LexerSymbol(literal));
+        return Collections.singleton(lexerSymbol);
     }
 
     @Override
     public Object check(BaseLexer l) throws ParserException {
-        LexerElement peek = l.peek();
-
-        if (peek != null && peek.toString().equals(Character.toString(literal))) {
-            l.check(peek);
-            return peek;
-        }
-
-        throw l.error(first());
+        l.require(lexerSymbol);
+        return lexerSymbol;
     }
 
 }

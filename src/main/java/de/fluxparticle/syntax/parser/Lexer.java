@@ -2,6 +2,8 @@ package de.fluxparticle.syntax.parser;
 
 import de.fluxparticle.syntax.lexer.*;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -11,7 +13,7 @@ public class Lexer extends BaseLexer {
 
     private static final LexerWhitespace WHITESPACE = new LexerWhitespace();
 
-    private final Scanner sc;
+    private final BufferedReader reader;
 
     private final SortedSet<String> literals;
 
@@ -21,8 +23,10 @@ public class Lexer extends BaseLexer {
 
     private LexerElement next;
 
-    public Lexer(Scanner sc, Set<String> literals, RuleParser... tokenParsers) {
-        this.sc = sc;
+    private boolean eof;
+
+    public Lexer(BufferedReader reader, Set<String> literals, RuleParser... tokenParsers) {
+        this.reader = reader;
         this.literals = new TreeSet<>(Comparator.comparing(String::length).reversed().thenComparing(Comparator.naturalOrder()));
         this.tokenParsers = tokenParsers;
 
@@ -37,20 +41,32 @@ public class Lexer extends BaseLexer {
     }
 
     @Override
-    public void check(LexerElement obj) throws ParserException {
+    public boolean check(LexerElement obj) {
         if (peek().equals(obj)) {
             nextToken();
+            return true;
         } else {
-            throw error(Collections.singleton(obj));
+            return false;
         }
     }
 
     private void nextLine() {
-        if (sc.hasNextLine()) {
-            String line = sc.nextLine().replace("\t", "    ");
+        String line;
+
+        try {
+            line = reader.readLine();
+        } catch (IOException e) {
+            line = null;
+        }
+
+        if (line != null) {
+            line = line.replace("\t", "    ");
             lineLexer = new LineLexer(line);
         } else {
-            lineLexer = null;
+            if (lineLexer == null) {
+                lineLexer = new LineLexer("");
+            }
+            eof = true;
         }
 
         nextToken();
@@ -58,7 +74,7 @@ public class Lexer extends BaseLexer {
 
     private void nextToken() {
         do {
-            if (lineLexer != null && lineLexer.peek() instanceof LexerEnd) {
+            if (lineLexer != null && lineLexer.peek() instanceof LexerEnd && !eof) {
                 nextLine();
             } else {
                 next = next();
@@ -68,7 +84,7 @@ public class Lexer extends BaseLexer {
 
     private LexerElement next() {
         if (lineLexer == null) {
-            return null;
+            throw new NoSuchElementException();
         }
 
         LexerElement ch = lineLexer.peek();
@@ -98,7 +114,7 @@ public class Lexer extends BaseLexer {
 
         for (char c : ch.toString().toCharArray()) {
             try {
-                lineLexer.check(new LexerSymbol(c));
+                lineLexer.require(new LexerSymbol(c));
             } catch (ParserException e) {
                 // empty
                 throw new RuntimeException(e);

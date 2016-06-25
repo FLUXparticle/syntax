@@ -6,6 +6,7 @@ import de.fluxparticle.syntax.lexer.LexerToken;
 import de.fluxparticle.syntax.lexer.ParserException;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -30,7 +31,7 @@ public class TokenParser extends Parser {
     @Override
     public Object check(BaseLexer l) throws ParserException {
         LexerElement peek = l.peek();
-        l.check(token);
+        l.require(token);
         return peek;
     }
 

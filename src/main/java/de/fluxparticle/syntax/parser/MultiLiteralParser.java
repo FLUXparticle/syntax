@@ -26,7 +26,7 @@ public class MultiLiteralParser extends Parser {
         LexerElement peek = l.peek();
 
         if (peek != null && peek.toString().equals(literal)) {
-            l.check(peek);
+            l.require(peek);
             return peek;
         }
 

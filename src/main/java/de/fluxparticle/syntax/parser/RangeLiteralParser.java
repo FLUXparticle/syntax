@@ -35,7 +35,7 @@ public class RangeLiteralParser extends Parser {
     public Object check(BaseLexer l) throws ParserException {
         LexerElement ch = l.peek();
         if (first().contains(ch)) {
-            l.check(ch);
+            l.require(ch);
             return ch;
         }
 

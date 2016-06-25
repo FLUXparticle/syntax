@@ -7,6 +7,8 @@ import de.fluxparticle.syntax.parser.ParserGenerator;
 import de.fluxparticle.syntax.parser.RuleParser;
 import de.fluxparticle.syntax.structure.Syntax;
 
+import java.io.BufferedReader;
+import java.io.Reader;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Scanner;
@@ -36,8 +38,14 @@ public class SyntaxConfig<T extends Enum<T>> {
         return parserMap.get(rule);
     }
 
-    public Lexer newLexer(Scanner sc) {
-        return new Lexer(sc, literals, tokenParsers);
+    public Lexer newLexer(Reader reader) {
+        BufferedReader bufferedReader;
+        if (reader instanceof BufferedReader) {
+            bufferedReader = (BufferedReader) reader;
+        } else {
+            bufferedReader = new BufferedReader(reader);
+        }
+        return new Lexer(bufferedReader, literals, tokenParsers);
     }
 
 }

@@ -1,5 +1,6 @@
 package de.fluxparticle.syntax.lexer;
 
+import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -9,7 +10,13 @@ public abstract class BaseLexer {
 
     public abstract LexerElement peek();
 
-    public abstract void check(LexerElement ch) throws ParserException;
+    public abstract boolean check(LexerElement ch);
+
+    public final void require(LexerElement ch) throws ParserException {
+        if (!check(ch)) {
+            throw error(Collections.singleton(ch));
+        }
+    }
 
     protected abstract String input();
 

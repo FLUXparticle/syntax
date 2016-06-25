@@ -35,4 +35,5 @@ public class SequenceParser extends Parser {
 
         return objects;
     }
+
 }

@@ -62,4 +62,11 @@ public class LexerToken extends LexerElement {
         return 0;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getStr() {
+        return str;
+    }
 }

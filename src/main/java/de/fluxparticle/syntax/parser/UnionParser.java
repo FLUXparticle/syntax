@@ -5,6 +5,7 @@ import de.fluxparticle.syntax.lexer.LexerElement;
 import de.fluxparticle.syntax.lexer.ParserException;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -30,10 +31,7 @@ public class UnionParser extends Parser {
                 throw new IllegalArgumentException();
             }
 
-            first = new HashSet<>();
-            for (Parser p : parsers) {
-                first.addAll(p.first());
-            }
+            first = calcFirst();
         }
         return first;
     }
@@ -53,6 +51,16 @@ public class UnionParser extends Parser {
         }
 
         return null;
+    }
+
+    private Set<LexerElement> calcFirst() {
+        Set<LexerElement> result = new HashSet<>();
+
+        for (Parser p : parsers) {
+            result.addAll(p.first());
+        }
+
+        return result;
     }
 
 }
