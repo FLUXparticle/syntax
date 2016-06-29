@@ -1,5 +1,7 @@
 package de.fluxparticle.syntax.structure;
 
+import de.fluxparticle.syntax.structure.ruletype.RuleType;
+
 import java.util.function.Function;
 
 /**
@@ -21,11 +23,13 @@ public interface ElementVisitor<R, D> {
 
     R visitReference(String reference, D data);
 
-    R visitRule(String name, boolean token, Function<Object[], Object> reduce, SingleElement[] elements, D data);
+    R visitRule(String name, RuleType ruleType, Function<Object[], Object> reduce, SingleElement[] elements, D data);
 
     R visitSequence(SingleElement[] elements, D data);
 
-    R visitToken(String name, SingleElement[] elements, D data);
+//    R visitToken(String name, SingleElement[] elements, D data);
+
+    R visitSpecial(Special.Item item, D data);
 
     R visitUnion(boolean nothing, Element[] elements, D data);
 

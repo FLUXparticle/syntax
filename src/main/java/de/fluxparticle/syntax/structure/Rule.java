@@ -1,5 +1,7 @@
 package de.fluxparticle.syntax.structure;
 
+import de.fluxparticle.syntax.structure.ruletype.RuleType;
+
 import java.util.function.Function;
 
 /**
@@ -9,21 +11,21 @@ public class Rule {
 
     private final String name;
 
-    private final boolean token;
+    private final RuleType ruleType;
 
     private Function<Object[], Object> reduce;
 
     private final SingleElement[] elements;
 
-    public Rule(String name, boolean token, Function<Object[], Object> reduce, SingleElement... elements) {
+    public Rule(String name, RuleType ruleType, Function<Object[], Object> reduce, SingleElement... elements) {
         this.name = name;
-        this.token = token;
+        this.ruleType = ruleType;
         this.reduce = reduce;
         this.elements = elements;
     }
 
     public <R, D> R accept(ElementVisitor<R, D> visitor, D data) {
-        return visitor.visitRule(name, token, reduce, elements, data);
+        return visitor.visitRule(name, ruleType, reduce, elements, data);
     }
 
     @Override
@@ -47,12 +49,16 @@ public class Rule {
         return name;
     }
 
-    public boolean isToken() {
-        return token;
+    public RuleType getRuleType() {
+        return ruleType;
     }
 
     public void setReduce(Function<Object[], Object> reduce) {
         this.reduce = reduce;
+    }
+
+    public SingleElement[] getElements() {
+        return elements;
     }
 
 }

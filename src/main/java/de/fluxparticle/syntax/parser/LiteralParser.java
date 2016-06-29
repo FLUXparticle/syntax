@@ -25,6 +25,7 @@ public class LiteralParser extends Parser {
     @Override
     public Object check(BaseLexer l) throws ParserException {
         l.require(lexerSymbol);
+
         return lexerSymbol;
     }
 

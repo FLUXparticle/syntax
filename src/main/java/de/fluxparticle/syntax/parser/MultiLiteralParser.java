@@ -3,6 +3,7 @@ package de.fluxparticle.syntax.parser;
 import de.fluxparticle.syntax.lexer.*;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -10,27 +11,24 @@ import java.util.Set;
  */
 public class MultiLiteralParser extends Parser {
 
-    private final String literal;
+    private final LexerToken lexerToken;
 
     public MultiLiteralParser(String literal) {
-        this.literal = literal;
+        lexerToken = new LexerToken(null, literal);
     }
 
     @Override
     Set<LexerElement> first() {
-        return Collections.singleton(new LexerToken(null, literal));
+        return Collections.singleton(lexerToken);
     }
 
     @Override
     public Object check(BaseLexer l) throws ParserException {
         LexerElement peek = l.peek();
 
-        if (peek != null && peek.toString().equals(literal)) {
-            l.require(peek);
-            return peek;
-        }
+        l.require(lexerToken);
 
-        throw l.error(first());
+        return peek;
     }
 
 }

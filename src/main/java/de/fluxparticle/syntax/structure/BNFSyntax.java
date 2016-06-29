@@ -2,6 +2,10 @@ package de.fluxparticle.syntax.structure;
 
 import de.fluxparticle.syntax.lexer.LexerElement;
 import de.fluxparticle.syntax.lexer.LexerSymbol;
+import de.fluxparticle.syntax.structure.ruletype.AnchorType;
+import de.fluxparticle.syntax.structure.ruletype.RuleType;
+import de.fluxparticle.syntax.structure.ruletype.SimpleRuleType;
+import de.fluxparticle.syntax.structure.ruletype.TokenRuleType;
 
 import java.util.List;
 
@@ -61,7 +65,7 @@ public enum BNFSyntax implements Syntax {
         }
     },
 
-    KEYWORD(lit(':'), loop(union(rangeLit('A', 'Z'), rangeLit('a', 'z'))), lit(':')) {
+    KEYWORD(lit(':'), loop(union(rangeLit('a', 'z'), rangeLit('A', 'Z'))), lit(':')) {
         @Override
         public Object reduce(Object... objects) {
             List list = (List) objects[1];
@@ -125,8 +129,26 @@ public enum BNFSyntax implements Syntax {
     },
 
     TOKEN_ELEMENT(union(ref("LITERAL"), ref("KEYWORD"), ref("OPTIONAL"), ref("UNION"), ref("LOOP"), ref("LOOP_EMPTY"))),
+/*
+    SPECIAL(union(lit('$'), lit('>'), lit('<'))) {
+        @Override
+        public Object reduce(Object... objects) {
+            LexerSymbol symbol = (LexerSymbol) objects[0];
 
-    SINGLE_ELEMENT(union(ref("TOKEN_ELEMENT"), /* ref("TOKEN"), */ ref("REFERENCE"))),
+            switch (symbol.getSymbol()) {
+                case '$':
+                    return new Special(Special.Item.NEW_LINE);
+                case '>':
+                    return new Special(Special.Item.INDENT);
+                case '<':
+                    return new Special(Special.Item.UNINDENT);
+            }
+
+            return null;
+        }
+    },
+*/
+    SINGLE_ELEMENT(union(ref("TOKEN_ELEMENT"), /* ref("TOKEN"), */ ref("REFERENCE")/*, ref("SPECIAL")*/)),
 
     SEQUENCE(lit('{'), loop(lit(' '), ref("SINGLE_ELEMENT")), lit('}')) {
         @Override
@@ -144,11 +166,33 @@ public enum BNFSyntax implements Syntax {
 
     ELEMENT(union(ref("SEQUENCE"), ref("SINGLE_ELEMENT"))),
 
-    RULE(ref("NAME"), lit(' '), lit(':'), lit('='), lit(' '), optional(seq(lit('$'), lit(' '))), loop(lit(' '), ref("SINGLE_ELEMENT")), lit(';')) {
+    ANCHOR(lit('@'), loop(union(rangeLit('a', 'z'), rangeLit('A', 'Z')))) {
+        @Override
+        public Object reduce(Object... objects) {
+            List list = (List) objects[1];
+
+            StringBuilder sb = new StringBuilder();
+            for (Object o : list) {
+                sb.append(o);
+            }
+
+            return new AnchorType(sb.toString());
+        }
+    },
+
+    TOKEN(lit('#')) {
+        @Override
+        public Object reduce(Object... objects) {
+            return new TokenRuleType();
+        }
+    },
+
+    RULE(ref("NAME"), lit(' '), lit(':'), lit('='), lit(' '), optional(seq(union(ref("ANCHOR"), ref("TOKEN")), lit(' '))), loop(lit(' '), ref("SINGLE_ELEMENT")), lit(';')) {
         @Override
         public Object reduce(Object... objects) {
             String name = (String) objects[0];
-            boolean token = objects[5] != null;
+            List ruleTypeList = (List) objects[5];
+            RuleType type = ruleTypeList != null ? (RuleType) ruleTypeList.get(0) : new SimpleRuleType();
             List list = (List) objects[6];
 
             SingleElement[] elements = new SingleElement[list.size()];
@@ -156,14 +200,14 @@ public enum BNFSyntax implements Syntax {
                 elements[i] = (SingleElement) list.get(i);
             }
 
-            return new Rule(name, token, objs -> null, elements);
+            return new Rule(name, type, objs -> null, elements);
         }
     };
 
     private final Rule rule;
 
     BNFSyntax(SingleElement... elements) {
-        this.rule = new Rule(name(), false, this::reduce, elements);
+        this.rule = new Rule(name(), new SimpleRuleType(), this::reduce, elements);
     }
 
     public Object reduce(Object... objects) {

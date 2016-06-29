@@ -21,4 +21,8 @@ public class Reference extends SingleElement {
         return reference;
     }
 
+    public String getReference() {
+        return reference;
+    }
+
 }

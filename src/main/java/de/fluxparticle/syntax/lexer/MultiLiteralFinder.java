@@ -1,6 +1,7 @@
 package de.fluxparticle.syntax.lexer;
 
 import de.fluxparticle.syntax.structure.*;
+import de.fluxparticle.syntax.structure.ruletype.RuleType;
 
 import java.util.Set;
 import java.util.function.Function;
@@ -49,7 +50,7 @@ public class MultiLiteralFinder implements ElementVisitor<Void, Set<String>> {
     }
 
     @Override
-    public Void visitRule(String name, boolean token, Function<Object[], Object> reduce, SingleElement[] elements, Set<String> data) {
+    public Void visitRule(String name, RuleType ruleType, Function<Object[], Object> reduce, SingleElement[] elements, Set<String> data) {
         for (SingleElement element : elements) {
             element.accept(this, data);
         }
@@ -65,10 +66,7 @@ public class MultiLiteralFinder implements ElementVisitor<Void, Set<String>> {
     }
 
     @Override
-    public Void visitToken(String name, SingleElement[] elements, Set<String> data) {
-        for (SingleElement element : elements) {
-            element.accept(this, data);
-        }
+    public Void visitSpecial(Special.Item item, Set<String> data) {
         return null;
     }
 

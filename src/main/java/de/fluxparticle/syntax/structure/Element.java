@@ -49,4 +49,6 @@ public abstract class Element {
 
     public abstract <R, D> R accept(ElementVisitor<R, D> visitor, D data);
 
+    public abstract String toString();
+
 }

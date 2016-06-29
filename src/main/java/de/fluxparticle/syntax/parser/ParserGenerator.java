@@ -4,7 +4,7 @@ import de.fluxparticle.syntax.lexer.BaseLexer;
 import de.fluxparticle.syntax.lexer.LexerElement;
 import de.fluxparticle.syntax.lexer.ParserException;
 import de.fluxparticle.syntax.structure.*;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import de.fluxparticle.syntax.structure.ruletype.RuleType;
 
 import java.util.HashMap;
 import java.util.List;
@@ -55,40 +55,21 @@ public class ParserGenerator implements ElementVisitor<Parser, Void> {
 
     @Override
     public Parser visitReference(String reference, Void data) {
-        Parser parser = parserMap.get(reference);
-        if (parser == null) {
-            parser = new Parser() {
-
-                @Override
-                Set<LexerElement> first() {
-                    return getParser().first();
-                }
-
-                @Override
-                public Object check(BaseLexer l) throws ParserException {
-                    return getParser().check(l);
-                }
-
-                private Parser getParser() {
-                    Parser p = parserMap.get(reference);
-                    if (p == null) {
-                        throw new IllegalStateException();
-                    }
-                    return p;
-                }
-            };
-        }
-        return parser;
+        return new ReferenceParser(() -> parserMap.get(reference));
     }
 
     @Override
-    public Parser visitRule(String name, boolean token, Function<Object[], Object> reduce, SingleElement[] elements, Void data) {
+    public Parser visitRule(String name, RuleType ruleType, Function<Object[], Object> reduce, SingleElement[] elements, Void data) {
         RuleParser p = new RuleParser(parsers(elements), name, reduce);
-        if (token) {
-            TokenParser t = new TokenParser(name);
-            parserMap.put(name, t);
-        } else {
-            parserMap.put(name, p);
+        switch (ruleType.getType()) {
+            case TOKEN:
+                TokenParser t = new TokenParser(name);
+                parserMap.put(name, t);
+                break;
+            case SIMPLE:
+            case ANCHOR:
+                parserMap.put(name, p);
+                break;
         }
         return p;
     }
@@ -99,8 +80,8 @@ public class ParserGenerator implements ElementVisitor<Parser, Void> {
     }
 
     @Override
-    public Parser visitToken(String name, SingleElement[] elements, Void data) {
-        throw new NotImplementedException();
+    public Parser visitSpecial(Special.Item item, Void data) {
+        return new SpecialParser(item);
     }
 
     @Override
