@@ -12,4 +12,8 @@ public class AnchorType extends RuleType {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
 }
