@@ -21,4 +21,8 @@ public class Literal extends SingleElement {
         return "'" + literal + "'";
     }
 
+    public char getLiteral() {
+        return literal;
+    }
+
 }
