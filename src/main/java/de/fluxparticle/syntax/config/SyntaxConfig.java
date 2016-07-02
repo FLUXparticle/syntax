@@ -7,13 +7,11 @@ import de.fluxparticle.syntax.parser.ParserGenerator;
 import de.fluxparticle.syntax.parser.RuleParser;
 import de.fluxparticle.syntax.structure.Syntax;
 import de.fluxparticle.syntax.structure.ruletype.RuleType;
-import de.fluxparticle.syntax.structure.ruletype.RuleType.Type;
 
 import java.io.BufferedReader;
 import java.io.Reader;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Set;
 
 /**
@@ -31,7 +29,7 @@ public class SyntaxConfig<T extends Enum<T>> {
         parserMap = Syntax.acceptAll(syntax, new ParserGenerator(), null);
         Syntax.acceptAll(syntax, new MultiLiteralFinder(), literals);
         tokenParsers = parserMap.keySet().stream()
-                .filter(s -> ((Syntax) s).getRule().getRuleType().getType() == Type.TOKEN)
+                .filter(s -> ((Syntax) s).getRule().getRuleType() == RuleType.TOKEN)
                 .map(parserMap::get).map(p -> (RuleParser) p)
                 .toArray(RuleParser[]::new);
     }

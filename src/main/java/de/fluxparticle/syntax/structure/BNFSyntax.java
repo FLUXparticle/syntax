@@ -2,10 +2,7 @@ package de.fluxparticle.syntax.structure;
 
 import de.fluxparticle.syntax.lexer.LexerElement;
 import de.fluxparticle.syntax.lexer.LexerSymbol;
-import de.fluxparticle.syntax.structure.ruletype.AnchorType;
 import de.fluxparticle.syntax.structure.ruletype.RuleType;
-import de.fluxparticle.syntax.structure.ruletype.SimpleRuleType;
-import de.fluxparticle.syntax.structure.ruletype.TokenRuleType;
 
 import java.util.List;
 
@@ -176,14 +173,14 @@ public enum BNFSyntax implements Syntax {
                 sb.append(o);
             }
 
-            return new AnchorType(sb.toString());
+            return RuleType.ANCHOR;
         }
     },
 
     TOKEN(lit('#')) {
         @Override
         public Object reduce(Object... objects) {
-            return new TokenRuleType();
+            return RuleType.TOKEN;
         }
     },
 
@@ -192,7 +189,7 @@ public enum BNFSyntax implements Syntax {
         public Object reduce(Object... objects) {
             String name = (String) objects[0];
             List ruleTypeList = (List) objects[5];
-            RuleType type = ruleTypeList != null ? (RuleType) ruleTypeList.get(0) : new SimpleRuleType();
+            RuleType type = ruleTypeList != null ? (RuleType) ruleTypeList.get(0) : RuleType.SIMPLE;
             List list = (List) objects[6];
 
             SingleElement[] elements = new SingleElement[list.size()];
@@ -207,7 +204,7 @@ public enum BNFSyntax implements Syntax {
     private final Rule rule;
 
     BNFSyntax(SingleElement... elements) {
-        this.rule = new Rule(name(), new SimpleRuleType(), this::reduce, elements);
+        this.rule = new Rule(name(), RuleType.SIMPLE, this::reduce, elements);
     }
 
     public Object reduce(Object... objects) {

@@ -61,7 +61,7 @@ public class ParserGenerator implements ElementVisitor<Parser, Void> {
     @Override
     public Parser visitRule(String name, RuleType ruleType, Function<Object[], Object> reduce, SingleElement[] elements, Void data) {
         RuleParser p = new RuleParser(parsers(elements), name, reduce);
-        switch (ruleType.getType()) {
+        switch (ruleType) {
             case TOKEN:
                 TokenParser t = new TokenParser(name);
                 parserMap.put(name, t);
