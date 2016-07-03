@@ -163,17 +163,17 @@ public enum BNFSyntax implements Syntax {
 
     ELEMENT(union(ref("SEQUENCE"), ref("SINGLE_ELEMENT"))),
 
-    ANCHOR(lit('@'), loop(union(rangeLit('a', 'z'), rangeLit('A', 'Z')))) {
+    ANCHOR(lit('@')) {
         @Override
         public Object reduce(Object... objects) {
-            List list = (List) objects[1];
-
-            StringBuilder sb = new StringBuilder();
-            for (Object o : list) {
-                sb.append(o);
-            }
-
             return RuleType.ANCHOR;
+        }
+    },
+
+    INPUT(lit('$')) {
+        @Override
+        public Object reduce(Object... objects) {
+            return RuleType.INPUT;
         }
     },
 
@@ -184,7 +184,7 @@ public enum BNFSyntax implements Syntax {
         }
     },
 
-    RULE(ref("NAME"), lit(' '), lit(':'), lit('='), lit(' '), optional(seq(union(ref("ANCHOR"), ref("TOKEN")), lit(' '))), loop(lit(' '), ref("SINGLE_ELEMENT")), lit(';')) {
+    RULE(ref("NAME"), lit(' '), lit(':'), lit('='), lit(' '), optional(seq(union(ref("TOKEN"), ref("ANCHOR"), ref("INPUT")), lit(' '))), loop(lit(' '), ref("SINGLE_ELEMENT")), lit(';')) {
         @Override
         public Object reduce(Object... objects) {
             String name = (String) objects[0];

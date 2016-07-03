@@ -7,6 +7,7 @@ public enum RuleType {
 
         SIMPLE,
         TOKEN,
-        ANCHOR;
+        ANCHOR,
+        INPUT
 
 }
