@@ -1,15 +1,10 @@
 package de.fluxparticle.syntax.parser;
 
-import de.fluxparticle.syntax.lexer.BaseLexer;
-import de.fluxparticle.syntax.lexer.LexerElement;
-import de.fluxparticle.syntax.lexer.ParserException;
 import de.fluxparticle.syntax.structure.*;
-import de.fluxparticle.syntax.structure.ruletype.RuleType;
+import de.fluxparticle.syntax.structure.RuleType;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -31,7 +26,7 @@ public class ParserGenerator implements ElementVisitor<Parser, Void> {
     }
 
     @Override
-    public Parser visitKeyword(String keyword, Void data) {
+    public Parser visitKeyword(KeywordType type, String keyword, Void data) {
         return new MultiLiteralParser(keyword);
     }
 

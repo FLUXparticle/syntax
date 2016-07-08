@@ -1,7 +1,7 @@
 package de.fluxparticle.syntax.lexer;
 
 import de.fluxparticle.syntax.structure.*;
-import de.fluxparticle.syntax.structure.ruletype.RuleType;
+import de.fluxparticle.syntax.structure.RuleType;
 
 import java.util.Set;
 import java.util.function.Function;
@@ -23,7 +23,7 @@ public class MultiLiteralFinder implements ElementVisitor<Void, Set<String>> {
     }
 
     @Override
-    public Void visitKeyword(String keyword, Set<String> data) {
+    public Void visitKeyword(KeywordType type, String keyword, Set<String> data) {
         return null;
     }
 

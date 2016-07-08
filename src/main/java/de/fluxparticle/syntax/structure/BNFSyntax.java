@@ -2,7 +2,6 @@ package de.fluxparticle.syntax.structure;
 
 import de.fluxparticle.syntax.lexer.LexerElement;
 import de.fluxparticle.syntax.lexer.LexerSymbol;
-import de.fluxparticle.syntax.structure.ruletype.RuleType;
 
 import java.util.List;
 
@@ -62,7 +61,7 @@ public enum BNFSyntax implements Syntax {
         }
     },
 
-    KEYWORD(lit(':'), loop(union(rangeLit('a', 'z'), rangeLit('A', 'Z'), lit('@'))), lit(':')) {
+    KEYWORD(lit(':'), loop(union(rangeLit('a', 'z'), rangeLit('A', 'Z'))), lit(':')) {
         @Override
         public Object reduce(Object... objects) {
             List list = (List) objects[1];
@@ -72,7 +71,22 @@ public enum BNFSyntax implements Syntax {
                 sb.append(o);
             }
 
-            return new Keyword(sb.toString());
+            return new Keyword(KeywordType.HIGHLIGHT, sb.toString());
+        }
+    },
+
+    COMMENT(lit('/'), lit('*'), loop(union(rangeLit('a', 'z'), rangeLit('A', 'Z'))), lit('*'), lit('/')) {
+        @Override
+        public Object reduce(Object... objects) {
+            List list = (List) objects[2];
+
+            StringBuilder sb = new StringBuilder("/*");
+            for (Object o : list) {
+                sb.append(o);
+            }
+            sb.append("*/");
+
+            return new Keyword(KeywordType.COMMENT, sb.toString());
         }
     },
 
@@ -125,7 +139,7 @@ public enum BNFSyntax implements Syntax {
         }
     },
 
-    TOKEN_ELEMENT(union(ref("LITERAL"), ref("KEYWORD"), ref("OPTIONAL"), ref("UNION"), ref("LOOP"), ref("LOOP_EMPTY"))),
+    TOKEN_ELEMENT(union(ref("LITERAL"), ref("KEYWORD"), ref("COMMENT"), ref("OPTIONAL"), ref("UNION"), ref("LOOP"), ref("LOOP_EMPTY"))),
 /*
     SPECIAL(union(lit('$'), lit('>'), lit('<'))) {
         @Override

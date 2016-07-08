@@ -1,4 +1,4 @@
-package de.fluxparticle.syntax.structure.ruletype;
+package de.fluxparticle.syntax.structure;
 
 /**
  * Created by sreinck on 29.06.16.

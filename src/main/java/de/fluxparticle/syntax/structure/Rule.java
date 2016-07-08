@@ -1,7 +1,5 @@
 package de.fluxparticle.syntax.structure;
 
-import de.fluxparticle.syntax.structure.ruletype.RuleType;
-
 import java.util.function.Function;
 
 /**

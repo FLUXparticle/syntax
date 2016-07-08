@@ -1,7 +1,5 @@
 package de.fluxparticle.syntax.structure;
 
-import de.fluxparticle.syntax.structure.ruletype.RuleType;
-
 import java.util.function.Function;
 
 /**
@@ -13,7 +11,7 @@ public interface ElementVisitor<R, D> {
 
     R visitMultiLiteral(String literal, D data);
 
-    R visitKeyword(String keyword, D data);
+    R visitKeyword(KeywordType type, String keyword, D data);
 
     R visitRangeLiteral(char from, char to, D data);
 

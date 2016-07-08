@@ -6,7 +6,7 @@ import de.fluxparticle.syntax.parser.Parser;
 import de.fluxparticle.syntax.parser.ParserGenerator;
 import de.fluxparticle.syntax.parser.RuleParser;
 import de.fluxparticle.syntax.structure.Syntax;
-import de.fluxparticle.syntax.structure.ruletype.RuleType;
+import de.fluxparticle.syntax.structure.RuleType;
 
 import java.io.BufferedReader;
 import java.io.Reader;
