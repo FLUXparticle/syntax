@@ -62,7 +62,7 @@ public enum BNFSyntax implements Syntax {
         }
     },
 
-    KEYWORD(lit(':'), loop(union(rangeLit('a', 'z'), rangeLit('A', 'Z'))), lit(':')) {
+    KEYWORD(lit(':'), loop(union(rangeLit('a', 'z'), rangeLit('A', 'Z'), lit('@'))), lit(':')) {
         @Override
         public Object reduce(Object... objects) {
             List list = (List) objects[1];

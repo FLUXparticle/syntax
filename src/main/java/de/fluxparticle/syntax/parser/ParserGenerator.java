@@ -68,6 +68,7 @@ public class ParserGenerator implements ElementVisitor<Parser, Void> {
                 break;
             case SIMPLE:
             case ANCHOR:
+            case INPUT:
                 parserMap.put(name, p);
                 break;
         }
