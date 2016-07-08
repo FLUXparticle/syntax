@@ -5,18 +5,18 @@ package de.fluxparticle.syntax.structure;
  */
 public class Keyword extends SingleElement {
 
-    private final KeywordType type;
-
     private final String keyword;
 
-    public Keyword(KeywordType type, String keyword) {
-        this.type = type;
+    private final KeywordType type;
+
+    public Keyword(String keyword, KeywordType type) {
         this.keyword = keyword;
+        this.type = type;
     }
 
     @Override
     public <R, D> R accept(ElementVisitor<R, D> visitor, D data) {
-        return visitor.visitKeyword(type, keyword, data);
+        return visitor.visitKeyword(keyword, type, data);
     }
 
     @Override

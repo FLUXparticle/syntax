@@ -71,7 +71,7 @@ public enum BNFSyntax implements Syntax {
                 sb.append(o);
             }
 
-            return new Keyword(KeywordType.HIGHLIGHT, sb.toString());
+            return new Keyword(sb.toString(), KeywordType.HIGHLIGHT);
         }
     },
 
@@ -86,7 +86,7 @@ public enum BNFSyntax implements Syntax {
             }
             sb.append("*/");
 
-            return new Keyword(KeywordType.COMMENT, sb.toString());
+            return new Keyword(sb.toString(), KeywordType.COMMENT);
         }
     },
 

@@ -26,7 +26,7 @@ public class ParserGenerator implements ElementVisitor<Parser, Void> {
     }
 
     @Override
-    public Parser visitKeyword(KeywordType type, String keyword, Void data) {
+    public Parser visitKeyword(String keyword, KeywordType type, Void data) {
         return new MultiLiteralParser(keyword);
     }
 

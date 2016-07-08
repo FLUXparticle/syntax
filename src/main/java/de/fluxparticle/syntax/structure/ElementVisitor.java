@@ -11,7 +11,7 @@ public interface ElementVisitor<R, D> {
 
     R visitMultiLiteral(String literal, D data);
 
-    R visitKeyword(KeywordType type, String keyword, D data);
+    R visitKeyword(String keyword, KeywordType type, D data);
 
     R visitRangeLiteral(char from, char to, D data);
 

@@ -23,7 +23,7 @@ public class MultiLiteralFinder implements ElementVisitor<Void, Set<String>> {
     }
 
     @Override
-    public Void visitKeyword(KeywordType type, String keyword, Set<String> data) {
+    public Void visitKeyword(String keyword, KeywordType type, Set<String> data) {
         return null;
     }
 
