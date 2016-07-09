@@ -75,6 +75,20 @@ public enum BNFSyntax implements Syntax {
         }
     },
 
+    WORD(lit('.'), loop(union(rangeLit('a', 'z'), rangeLit('A', 'Z'))), lit('.')) {
+        @Override
+        public Object reduce(Object... objects) {
+            List list = (List) objects[1];
+
+            StringBuilder sb = new StringBuilder();
+            for (Object o : list) {
+                sb.append(o);
+            }
+
+            return new Keyword(sb.toString(), KeywordType.NORMAL);
+        }
+    },
+
     COMMENT(lit('/'), lit('*'), loop(union(rangeLit('a', 'z'), rangeLit('A', 'Z'))), lit('*'), lit('/')) {
         @Override
         public Object reduce(Object... objects) {
@@ -139,27 +153,9 @@ public enum BNFSyntax implements Syntax {
         }
     },
 
-    TOKEN_ELEMENT(union(ref("LITERAL"), ref("KEYWORD"), ref("COMMENT"), ref("OPTIONAL"), ref("UNION"), ref("LOOP"), ref("LOOP_EMPTY"))),
-/*
-    SPECIAL(union(lit('$'), lit('>'), lit('<'))) {
-        @Override
-        public Object reduce(Object... objects) {
-            LexerSymbol symbol = (LexerSymbol) objects[0];
+    TOKEN_ELEMENT(union(ref("LITERAL"), ref("KEYWORD"), ref("WORD"), ref("COMMENT"), ref("OPTIONAL"), ref("UNION"), ref("LOOP"), ref("LOOP_EMPTY"))),
 
-            switch (symbol.getSymbol()) {
-                case '$':
-                    return new Special(Special.Item.NEW_LINE);
-                case '>':
-                    return new Special(Special.Item.INDENT);
-                case '<':
-                    return new Special(Special.Item.UNINDENT);
-            }
-
-            return null;
-        }
-    },
-*/
-    SINGLE_ELEMENT(union(ref("TOKEN_ELEMENT"), /* ref("TOKEN"), */ ref("REFERENCE")/*, ref("SPECIAL")*/)),
+    SINGLE_ELEMENT(union(ref("TOKEN_ELEMENT"), ref("REFERENCE"))),
 
     SEQUENCE(lit('{'), loop(lit(' '), ref("SINGLE_ELEMENT")), lit('}')) {
         @Override
