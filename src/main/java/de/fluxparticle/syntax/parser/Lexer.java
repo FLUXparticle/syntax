@@ -99,7 +99,6 @@ public class Lexer extends BaseLexer {
                     return new LexerToken(parser.getName(), input.substring(begin, end));
                 } catch (ParserException e) {
                     // empty
-                    throw new RuntimeException(e);
                 }
             }
         }
@@ -117,7 +116,6 @@ public class Lexer extends BaseLexer {
                 lineLexer.require(new LexerSymbol(c));
             } catch (ParserException e) {
                 // empty
-                throw new RuntimeException(e);
             }
         }
 
