@@ -50,6 +50,17 @@ public class Lexer extends BaseLexer {
         }
     }
 
+    public String[] split() {
+        List<String> list = new ArrayList<>();
+
+        while (!(next instanceof LexerEnd)) {
+            list.add(next.toString());
+            next = next();
+        }
+
+        return list.stream().toArray(String[]::new);
+    }
+
     private void nextLine() {
         String line;
 
