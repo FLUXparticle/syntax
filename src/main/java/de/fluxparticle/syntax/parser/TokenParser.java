@@ -18,9 +18,9 @@ public class TokenParser extends Parser {
 
     private final LexerToken token;
 
-    public TokenParser(String name) {
+    public TokenParser(String name, RuleParser parser) {
         this.name = name;
-        token = new LexerToken(name, null);
+        token = new LexerToken(parser, null);
     }
 
     @Override

@@ -58,7 +58,7 @@ public class ParserGenerator implements ElementVisitor<Parser, Void> {
         RuleParser p = new RuleParser(parsers(elements), name, reduce);
         switch (ruleType) {
             case TOKEN:
-                TokenParser t = new TokenParser(name);
+                TokenParser t = new TokenParser(name, p);
                 parserMap.put(name, t);
                 break;
             case SIMPLE:

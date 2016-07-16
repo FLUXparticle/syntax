@@ -6,6 +6,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.*;
 
+import static java.util.Comparator.comparing;
+import static java.util.Comparator.naturalOrder;
+
 /**
  * Created by sreinck on 05.01.16.
  */
@@ -27,7 +30,7 @@ public class Lexer extends BaseLexer {
 
     public Lexer(BufferedReader reader, Set<String> literals, RuleParser... tokenParsers) {
         this.reader = reader;
-        this.literals = new TreeSet<>(Comparator.comparing(String::length).reversed().thenComparing(Comparator.naturalOrder()));
+        this.literals = new TreeSet<>(comparing(String::length).reversed().thenComparing(naturalOrder()));
         this.tokenParsers = tokenParsers;
 
         this.literals.addAll(literals);
@@ -107,7 +110,7 @@ public class Lexer extends BaseLexer {
                     int begin = lineLexer.pos();
                     parser.check(lineLexer);
                     int end = lineLexer.pos();
-                    return new LexerToken(parser.getName(), input.substring(begin, end));
+                    return new LexerToken(parser, input.substring(begin, end));
                 } catch (ParserException e) {
                     // empty
                 }
