@@ -20,4 +20,11 @@ public class LexerEnd extends LexerElement {
         return "";
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        return true;
+    }
+
 }

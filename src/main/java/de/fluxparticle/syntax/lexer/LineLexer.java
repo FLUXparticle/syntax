@@ -7,9 +7,9 @@ import java.util.Collections;
  */
 public class LineLexer extends BaseLexer {
 
-    String input;
+    private String input;
 
-    int pos;
+    private int pos;
 
     public LineLexer(String input) {
         this.input = input;
