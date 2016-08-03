@@ -1,5 +1,6 @@
 package de.fluxparticle.syntax.lexer;
 
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -26,11 +27,15 @@ public class ParserException extends Exception {
     }
 
     public void printLexerState() {
-        System.out.println(input);
+        printLexerState(new PrintWriter(System.out));
+    }
+
+    public void printLexerState(PrintWriter out) {
+        out.println(input);
         for (int i = 0; i < pos; i++) {
-            System.out.print(' ');
+            out.print(' ');
         }
-        System.out.println('^');
+        out.println('^');
     }
 
     private static List<String> extractLexerStrings(Set<LexerElement> expected) {
