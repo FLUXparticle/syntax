@@ -195,20 +195,32 @@ public enum BNFSyntax implements Rule {
     },
 
     // TODO optional Display-Name
-    RULE(ref("NAME"), lit(' '), lit(':'), lit('='), lit(' '), optional(seq(union(ref("TOKEN"), ref("ANCHOR"), ref("INPUT")), lit(' '))), loop(lit(' '), ref("SINGLE_ELEMENT")), lit(';')) {
+    RULE(ref("NAME"), optional(seq(lit('('), loop(union(rangeLit('a', 'z'), rangeLit('A', 'Z'), lit(' '))), lit(')'))), lit(' '), lit(':'), lit('='), lit(' '), optional(seq(union(ref("TOKEN"), ref("ANCHOR"), ref("INPUT")), lit(' '))), loop(lit(' '), ref("SINGLE_ELEMENT")), lit(';')) {
         @Override
         public Object reduce(Object... objects) {
             String name = (String) objects[0];
-            List ruleTypeList = (List) objects[5];
-            RuleType type = ruleTypeList != null ? (RuleType) ruleTypeList.get(0) : RuleType.SIMPLE;
-            List list = (List) objects[6];
 
+            List displayNameList = (List) objects[1];
+            StringBuilder displayName = new StringBuilder();
+            if (displayNameList == null) {
+                displayName.append(name);
+            } else {
+                displayNameList = (List) displayNameList.get(1);
+                for (Object o : displayNameList) {
+                    displayName.append(o);
+                }
+            }
+
+            List ruleTypeList = (List) objects[6];
+            RuleType type = ruleTypeList != null ? (RuleType) ruleTypeList.get(0) : RuleType.SIMPLE;
+
+            List list = (List) objects[7];
             SingleElement[] elements = new SingleElement[list.size()];
             for (int i = 0; i < list.size(); i++) {
                 elements[i] = (SingleElement) list.get(i);
             }
 
-            return new SimpleRule(name, type, elements);
+            return new SimpleRule(name, displayName.toString(), type, elements);
         }
     };
 
