@@ -3,8 +3,6 @@ package de.fluxparticle.syntax.structure;
 import sun.misc.SharedSecrets;
 
 import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
@@ -29,17 +27,6 @@ public class EnumSyntax extends Syntax {
     @Override
     public Collection<Rule> getRules() {
         return unmodifiableList(asList(rules));
-    }
-
-    public <R, D> Map<String, R> acceptAll(ElementVisitor<R, D> visitor, D data) {
-        Map<String, R> map = new LinkedHashMap<>();
-
-        for (Rule rule : rules) {
-            R result = rule.accept(visitor, data);
-            map.put(rule.name(), result);
-        }
-
-        return map;
     }
 
 }

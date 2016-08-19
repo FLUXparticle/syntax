@@ -1,81 +1,71 @@
 package de.fluxparticle.syntax.lexer;
 
 import de.fluxparticle.syntax.structure.*;
-import de.fluxparticle.syntax.structure.RuleType;
 
-import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Stream;
+
+import static java.util.stream.Stream.empty;
+import static java.util.stream.Stream.of;
 
 /**
  * Created by sreinck on 11.01.16.
  */
-public class MultiLiteralFinder implements ElementVisitor<Void, Set<String>> {
+public class MultiLiteralFinder implements ElementVisitor<Stream<String>, Void> {
 
     @Override
-    public Void visitLiteral(char literal, Set<String> data) {
-        return null;
+    public Stream<String> visitLiteral(char literal, Void data) {
+        return empty();
     }
 
     @Override
-    public Void visitMultiLiteral(String literal, Set<String> data) {
-        data.add(literal);
-        return null;
+    public Stream<String> visitMultiLiteral(String literal, Void data) {
+        return of(literal);
     }
 
     @Override
-    public Void visitKeyword(String keyword, KeywordType type, Set<String> data) {
-        return null;
+    public Stream<String> visitKeyword(String keyword, KeywordType type, Void data) {
+        return empty();
     }
 
     @Override
-    public Void visitRangeLiteral(char from, char to, Set<String> data) {
-        return null;
+    public Stream<String> visitRangeLiteral(char from, char to, Void data) {
+        return empty();
     }
 
     @Override
-    public Void visitLoop(Element element, Literal delimiter, Set<String> data) {
-        element.accept(this, data);
-        return null;
+    public Stream<String> visitLoop(Element element, Literal delimiter, Void data) {
+        return element.accept(this, data);
     }
 
     @Override
-    public Void visitLoopEmpty(Element element, Set<String> data) {
-        element.accept(this, data);
-        return null;
+    public Stream<String> visitLoopEmpty(Element element, Void data) {
+        return element.accept(this, data);
     }
 
     @Override
-    public Void visitReference(String reference, Set<String> data) {
-        return null;
+    public Stream<String> visitReference(String reference, Void data) {
+        return empty();
     }
 
     @Override
-    public Void visitRule(String name, RuleType ruleType, Function<Object[], Object> reduce, SingleElement[] elements, Set<String> data) {
-        for (SingleElement element : elements) {
-            element.accept(this, data);
-        }
-        return null;
+    public Stream<String> visitRule(String name, RuleType ruleType, Function<Object[], Object> reduce, SingleElement[] elements, Void data) {
+        return of(elements).flatMap(element -> element.accept(this, data));
     }
 
     @Override
-    public Void visitSequence(SingleElement[] elements, Set<String> data) {
-        for (SingleElement element : elements) {
-            element.accept(this, data);
-        }
-        return null;
+    public Stream<String> visitSequence(SingleElement[] elements, Void data) {
+        return of(elements).flatMap(element -> element.accept(this, data));
     }
 
     @Override
-    public Void visitSpecial(Special.Item item, Set<String> data) {
-        return null;
+    public Stream<String> visitSpecial(Special.Item item, Void data) {
+        return empty();
     }
 
     @Override
-    public Void visitUnion(boolean nothing, Element[] elements, Set<String> data) {
-        for (Element element : elements) {
-            element.accept(this, data);
-        }
-        return null;
+    public Stream<String> visitUnion(boolean nothing, Element[] elements, Void data) {
+        return of(elements).flatMap(element -> element.accept(this, data));
     }
 
 }

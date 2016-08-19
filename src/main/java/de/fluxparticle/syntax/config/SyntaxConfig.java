@@ -11,9 +11,11 @@ import de.fluxparticle.syntax.structure.Syntax;
 
 import java.io.BufferedReader;
 import java.io.Reader;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * Created by sreinck on 25.02.16.
@@ -22,7 +24,7 @@ public class SyntaxConfig {
 
     private final Map<String, Parser> parserMap;
 
-    private final Set<String> literals = new HashSet<>();
+    private final Set<String> literals;
 
     private final RuleParser[] tokenParsers;
 
@@ -32,7 +34,9 @@ public class SyntaxConfig {
 
     public SyntaxConfig(Syntax syntax) {
         parserMap = syntax.acceptAll(new ParserGenerator(), null);
-        syntax.acceptAll(new MultiLiteralFinder(), literals);
+        literals = syntax.acceptAll(new MultiLiteralFinder(), null).values().stream()
+                .flatMap(identity())
+                .collect(toSet());
         tokenParsers = syntax.getRules().stream()
                 .filter(rule -> rule.getRuleType() == RuleType.TOKEN)
                 .map(rule -> parserMap.get(rule.name()))
