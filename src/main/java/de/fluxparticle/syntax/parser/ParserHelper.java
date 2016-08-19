@@ -4,20 +4,17 @@ import de.fluxparticle.syntax.lexer.LineLexer;
 import de.fluxparticle.syntax.lexer.ParserException;
 import de.fluxparticle.syntax.structure.BNFSyntax;
 import de.fluxparticle.syntax.structure.Rule;
-import de.fluxparticle.syntax.structure.Syntax;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
+import static de.fluxparticle.syntax.structure.BNFSyntax.BNF_SYNTAX;
 
 /**
  * Created by sreinck on 05.01.16.
  */
 public class ParserHelper {
 
-    private static final Parser ruleParser = Syntax
-            .acceptAll(BNFSyntax.class, new ParserGenerator(), null)
-            .get(BNFSyntax.RULE);
+    private static final Parser ruleParser = BNF_SYNTAX
+            .acceptAll(new ParserGenerator(), null)
+            .get(BNFSyntax.RULE.name());
 
     public static Rule parse(String str) {
         LineLexer l = new LineLexer(str);

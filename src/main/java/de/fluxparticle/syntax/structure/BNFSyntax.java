@@ -10,7 +10,7 @@ import static de.fluxparticle.syntax.structure.Element.*;
 /**
  * Created by sreinck on 04.01.16.
  */
-public enum BNFSyntax implements Syntax {
+public enum BNFSyntax implements Rule {
 
     SINGLE_LITERAL(lit('\''), rangeLit((char) 32, (char) 126), lit('\'')) {
         @Override
@@ -194,6 +194,7 @@ public enum BNFSyntax implements Syntax {
         }
     },
 
+    // TODO optional Display-Name
     RULE(ref("NAME"), lit(' '), lit(':'), lit('='), lit(' '), optional(seq(union(ref("TOKEN"), ref("ANCHOR"), ref("INPUT")), lit(' '))), loop(lit(' '), ref("SINGLE_ELEMENT")), lit(';')) {
         @Override
         public Object reduce(Object... objects) {
@@ -207,14 +208,21 @@ public enum BNFSyntax implements Syntax {
                 elements[i] = (SingleElement) list.get(i);
             }
 
-            return new Rule(name, type, objs -> null, elements);
+            return new SimpleRule(name, type, elements);
         }
     };
 
-    private final Rule rule;
+    public static final Syntax BNF_SYNTAX = new EnumSyntax(BNFSyntax.class);
+
+    private final SingleElement[] elements;
 
     BNFSyntax(SingleElement... elements) {
-        this.rule = new Rule(name(), RuleType.SIMPLE, this::reduce, elements);
+        this.elements = elements;
+    }
+
+    @Override
+    public RuleType getRuleType() {
+        return RuleType.SIMPLE;
     }
 
     public Object reduce(Object... objects) {
@@ -222,8 +230,8 @@ public enum BNFSyntax implements Syntax {
     }
 
     @Override
-    public Rule getRule() {
-        return rule;
+    public SingleElement[] getElements() {
+        return elements;
     }
 
 }

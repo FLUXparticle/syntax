@@ -5,8 +5,9 @@ import de.fluxparticle.syntax.parser.Lexer;
 import de.fluxparticle.syntax.parser.Parser;
 import de.fluxparticle.syntax.parser.ParserGenerator;
 import de.fluxparticle.syntax.parser.RuleParser;
-import de.fluxparticle.syntax.structure.Syntax;
+import de.fluxparticle.syntax.structure.EnumSyntax;
 import de.fluxparticle.syntax.structure.RuleType;
+import de.fluxparticle.syntax.structure.Syntax;
 
 import java.io.BufferedReader;
 import java.io.Reader;
@@ -17,25 +18,29 @@ import java.util.Set;
 /**
  * Created by sreinck on 25.02.16.
  */
-public class SyntaxConfig<T extends Enum<T>> {
+public class SyntaxConfig {
 
-    private final Map<T, Parser> parserMap;
+    private final Map<String, Parser> parserMap;
 
     private final Set<String> literals = new HashSet<>();
 
     private final RuleParser[] tokenParsers;
 
-    public SyntaxConfig(Class<T> syntax) {
-        parserMap = Syntax.acceptAll(syntax, new ParserGenerator(), null);
-        Syntax.acceptAll(syntax, new MultiLiteralFinder(), literals);
-        tokenParsers = parserMap.keySet().stream()
-                .filter(s -> ((Syntax) s).getRule().getRuleType() == RuleType.TOKEN)
-                .map(parserMap::get).map(p -> (RuleParser) p)
+    public <E extends Enum<E>> SyntaxConfig(Class<E> clazz) {
+        this(new EnumSyntax(clazz));
+    }
+
+    public SyntaxConfig(Syntax syntax) {
+        parserMap = syntax.acceptAll(new ParserGenerator(), null);
+        syntax.acceptAll(new MultiLiteralFinder(), literals);
+        tokenParsers = syntax.getRules().stream()
+                .filter(rule -> rule.getRuleType() == RuleType.TOKEN)
+                .map(rule -> parserMap.get(rule.name()))
                 .toArray(RuleParser[]::new);
     }
 
-    public Parser getParser(T rule) {
-        return parserMap.get(rule);
+    public Parser getParser(String ruleName) {
+        return parserMap.get(ruleName);
     }
 
     public Lexer newLexer(Reader reader) {
