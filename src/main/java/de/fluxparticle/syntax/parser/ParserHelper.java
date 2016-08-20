@@ -12,14 +12,14 @@ import static de.fluxparticle.syntax.structure.BNFSyntax.BNF_SYNTAX;
  */
 public class ParserHelper {
 
-    private static final Parser ruleParser = BNF_SYNTAX
+    private static final Parser RULE_PARSER = BNF_SYNTAX
             .acceptAll(new ParserGenerator(), null)
             .get(BNFSyntax.RULE.name());
 
     public static Rule parse(String str) {
         LineLexer l = new LineLexer(str);
         try {
-            return (Rule) ruleParser.check(l);
+            return (Rule) RULE_PARSER.check(l);
         } catch (ParserException e) {
             System.out.println(e.getMessage());
             e.printLexerState();
