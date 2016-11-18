@@ -10,7 +10,7 @@ import static java.util.Collections.unmodifiableList;
 /**
  * Created by sreinck on 04.01.16.
  */
-public class EnumSyntax extends Syntax {
+public class EnumSyntax implements Syntax {
 
     private final Rule[] rules;
 
@@ -25,7 +25,7 @@ public class EnumSyntax extends Syntax {
     }
 
     @Override
-    public Collection<Rule> getRules() {
+    public Collection<? extends Rule> getRules() {
         return unmodifiableList(asList(rules));
     }
 

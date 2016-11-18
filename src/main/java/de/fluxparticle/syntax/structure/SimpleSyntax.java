@@ -10,21 +10,21 @@ import static java.util.stream.Collectors.toList;
 /**
  * Created by sreinck on 19.08.16.
  */
-public class SimpleSyntax extends Syntax {
+public class SimpleSyntax implements Syntax {
 
     public static SimpleSyntax parse(Collection<String> lines) {
-        List<Rule> rules = lines.stream().map(ParserHelper::parse).collect(toList());
+        List<SimpleRule> rules = lines.stream().map(ParserHelper::parse).collect(toList());
         return new SimpleSyntax(rules);
     }
 
-    private final Collection<Rule> rules;
+    private final Collection<SimpleRule> rules;
 
-    private SimpleSyntax(Collection<Rule> rules) {
+    private SimpleSyntax(Collection<SimpleRule> rules) {
         this.rules = rules;
     }
 
     @Override
-    public Collection<Rule> getRules() {
+    public Collection<? extends Rule> getRules() {
         return rules;
     }
 
