@@ -5,7 +5,6 @@ import de.fluxparticle.syntax.parser.Lexer;
 import de.fluxparticle.syntax.parser.Parser;
 import de.fluxparticle.syntax.parser.ParserGenerator;
 import de.fluxparticle.syntax.parser.RuleParser;
-import de.fluxparticle.syntax.structure.EnumSyntax;
 import de.fluxparticle.syntax.structure.RuleType;
 import de.fluxparticle.syntax.structure.Syntax;
 
@@ -27,10 +26,6 @@ public class SyntaxConfig {
     private final Set<String> literals;
 
     private final RuleParser[] tokenParsers;
-
-    public <E extends Enum<E>> SyntaxConfig(Class<E> clazz) {
-        this(new EnumSyntax(clazz));
-    }
 
     public SyntaxConfig(Syntax syntax) {
         parserMap = syntax.acceptAll(new ParserGenerator(), null);
