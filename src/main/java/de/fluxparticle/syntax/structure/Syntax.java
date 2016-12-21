@@ -14,7 +14,7 @@ public interface Syntax {
 
     default <R, D> Map<String, R> acceptAll(ElementVisitor<R, D> visitor, D data) {
         return getRules().stream()
-                .collect(toMap(Rule::name, rule -> rule.accept(visitor, data)));
+                .collect(toMap(Rule::name, rule -> rule.acceptRule(visitor, data)));
     }
 
 }

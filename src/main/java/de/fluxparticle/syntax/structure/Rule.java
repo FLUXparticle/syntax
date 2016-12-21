@@ -5,7 +5,7 @@ package de.fluxparticle.syntax.structure;
  */
 public interface Rule {
 
-    default  <R, D> R accept(ElementVisitor<R, D> visitor, D data) {
+    default  <R, D> R acceptRule(ElementVisitor<R, D> visitor, D data) {
         return visitor.visitRule(name(), getRuleType(), this::reduce, getElements(), data);
     }
 

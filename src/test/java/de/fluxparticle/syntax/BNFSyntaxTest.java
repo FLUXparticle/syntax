@@ -60,7 +60,7 @@ public class BNFSyntaxTest {
 
         ParserGenerator parserGenerator = new ParserGenerator();
         for (BNFSyntax syntax : BNFSyntax.values()) {
-            ruleParser = syntax.accept(parserGenerator, null);
+            ruleParser = syntax.acceptRule(parserGenerator, null);
         }
 
         return ruleParser;

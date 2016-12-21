@@ -5,7 +5,7 @@ package de.fluxparticle.syntax.structure;
  */
 public class Sequence extends Element {
 
-    private final SingleElement[] elements;
+    protected final SingleElement[] elements;
 
     public Sequence(SingleElement... elements) {
         this.elements = elements;

@@ -3,7 +3,7 @@ package de.fluxparticle.syntax.structure;
 /**
  * Created by sreinck on 19.08.16.
  */
-public class SimpleRule implements Rule {
+public class SimpleRule extends Sequence implements Rule {
 
     private final String name;
 
@@ -11,13 +11,16 @@ public class SimpleRule implements Rule {
 
     private final RuleType type;
 
-    private final SingleElement[] elements;
-
     public SimpleRule(String name, String displayName, RuleType type, SingleElement[] elements) {
+        super(elements);
         this.name = name;
         this.displayName = displayName;
         this.type = type;
-        this.elements = elements;
+    }
+
+    @Override
+    public <R, D> R acceptRule(ElementVisitor<R, D> visitor, D data) {
+        return visitor.visitRule(name, type, this::reduce, elements, data);
     }
 
     @Override
