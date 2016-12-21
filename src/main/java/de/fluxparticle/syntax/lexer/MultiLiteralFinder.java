@@ -1,6 +1,7 @@
 package de.fluxparticle.syntax.lexer;
 
 import de.fluxparticle.syntax.structure.*;
+import de.fluxparticle.utils.chain.Chain;
 
 import java.util.function.Function;
 import java.util.stream.Stream;

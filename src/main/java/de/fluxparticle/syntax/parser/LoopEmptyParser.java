@@ -1,7 +1,6 @@
 package de.fluxparticle.syntax.parser;
 
 import de.fluxparticle.syntax.lexer.BaseLexer;
-import de.fluxparticle.syntax.lexer.EmptyLexer;
 import de.fluxparticle.syntax.lexer.LexerElement;
 import de.fluxparticle.syntax.lexer.ParserException;
 
@@ -27,14 +26,9 @@ public class LoopEmptyParser extends Parser {
 
     @Override
     public Object check(BaseLexer l) throws ParserException {
-        Set<LexerElement> next = p.first();
-
         List<Object> objects = new ArrayList<>();
 
-        while (next.contains(l.peek())) {
-            Object obj = p.check(l);
-            objects.add(obj);
-        }
+        while (l.with(p, objects::add));
 
         return objects;
     }

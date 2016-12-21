@@ -3,7 +3,6 @@ package de.fluxparticle.syntax.parser;
 import de.fluxparticle.syntax.lexer.*;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 
 /**

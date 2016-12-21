@@ -1,13 +1,15 @@
 package de.fluxparticle.syntax.lexer;
 
-import java.util.Collections;
+import java.util.Stack;
 
 /**
  * Created by sreinck on 09.01.16.
  */
 public class LineLexer extends BaseLexer {
 
-    private String input;
+    private final Stack<Integer> stack = new Stack<>();
+
+    private final String input;
 
     private int pos;
 
@@ -30,6 +32,21 @@ public class LineLexer extends BaseLexer {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public void push() {
+        stack.push(pos);
+    }
+
+    @Override
+    public void pop() {
+        pos = stack.pop();
+    }
+
+    @Override
+    public void drop() {
+        stack.pop();
     }
 
     @Override

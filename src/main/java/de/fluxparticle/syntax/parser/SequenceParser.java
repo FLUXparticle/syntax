@@ -15,7 +15,7 @@ public class SequenceParser extends Parser {
 
     private final Parser[] parsers;
 
-    public SequenceParser(Parser[] parsers) {
+    public SequenceParser(Parser... parsers) {
         this.parsers = parsers;
     }
 

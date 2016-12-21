@@ -5,7 +5,6 @@ import de.fluxparticle.syntax.lexer.LexerElement;
 import de.fluxparticle.syntax.lexer.ParserException;
 import de.fluxparticle.syntax.structure.Special;
 
-import java.util.List;
 import java.util.Set;
 
 /**

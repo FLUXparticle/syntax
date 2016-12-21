@@ -1,11 +1,18 @@
 package de.fluxparticle.syntax.parser;
 
 import de.fluxparticle.syntax.lexer.*;
+import de.fluxparticle.utils.chain.Chain;
+import de.fluxparticle.utils.chain.EagerChain;
+import de.fluxparticle.utils.chain.LazyChain;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
+import static de.fluxparticle.utils.chain.Chain.emptyChain;
 import static java.util.Comparator.comparing;
 import static java.util.Comparator.naturalOrder;
 
@@ -53,15 +60,16 @@ public class Lexer extends BaseLexer {
         }
     }
 
-    public String[] split() {
-        List<String> list = new ArrayList<>();
-
-        while (!(next instanceof LexerEnd)) {
-            list.add(next.toString());
-            next = next();
-        }
-
-        return list.stream().toArray(String[]::new);
+    public Chain<LexerState> asStateChain() {
+        return new LazyChain<>(() -> {
+            LexerState state = new LexerState(next, input(), pos());
+            if (next instanceof LexerEnd) {
+                return new EagerChain<>(state, emptyChain());
+            } else {
+                nextToken();
+                return new EagerChain<>(state, asStateChain());
+            }
+        });
     }
 
     private void nextLine() {
@@ -138,6 +146,21 @@ public class Lexer extends BaseLexer {
         }
 
         return ch;
+    }
+
+    @Override
+    public void push() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void pop() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void drop() {
+        throw new UnsupportedOperationException();
     }
 
     @Override

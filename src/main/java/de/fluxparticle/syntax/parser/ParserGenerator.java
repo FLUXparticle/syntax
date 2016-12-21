@@ -1,7 +1,6 @@
 package de.fluxparticle.syntax.parser;
 
 import de.fluxparticle.syntax.structure.*;
-import de.fluxparticle.syntax.structure.RuleType;
 
 import java.util.HashMap;
 import java.util.Map;

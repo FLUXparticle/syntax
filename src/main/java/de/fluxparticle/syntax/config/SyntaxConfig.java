@@ -1,5 +1,6 @@
 package de.fluxparticle.syntax.config;
 
+import de.fluxparticle.syntax.lexer.ChainLexer;
 import de.fluxparticle.syntax.lexer.MultiLiteralFinder;
 import de.fluxparticle.syntax.parser.Lexer;
 import de.fluxparticle.syntax.parser.Parser;
@@ -7,6 +8,7 @@ import de.fluxparticle.syntax.parser.ParserGenerator;
 import de.fluxparticle.syntax.parser.RuleParser;
 import de.fluxparticle.syntax.structure.RuleType;
 import de.fluxparticle.syntax.structure.Syntax;
+import de.fluxparticle.utils.chain.Chain;
 
 import java.io.BufferedReader;
 import java.io.Reader;
@@ -42,14 +44,15 @@ public class SyntaxConfig {
         return parserMap.get(ruleName);
     }
 
-    public Lexer newLexer(Reader reader) {
+    public ChainLexer newLexer(Reader reader) {
         BufferedReader bufferedReader;
         if (reader instanceof BufferedReader) {
             bufferedReader = (BufferedReader) reader;
         } else {
             bufferedReader = new BufferedReader(reader);
         }
-        return new Lexer(bufferedReader, literals, tokenParsers);
+        Lexer lexer = new Lexer(bufferedReader, literals, tokenParsers);
+        return new ChainLexer(lexer);
     }
 
 }

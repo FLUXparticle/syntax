@@ -36,6 +36,7 @@ public class ParserException extends Exception {
             out.print(' ');
         }
         out.println('^');
+        out.flush();
     }
 
     private static List<String> extractLexerStrings(Set<LexerElement> expected) {

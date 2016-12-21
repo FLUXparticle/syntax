@@ -132,6 +132,12 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>de.fluxparticle</groupId>
+            <artifactId>utils</artifactId>
+            <version>1.0</version>
+        </dependency>
+
         <!-- Test -->
         <dependency>
             <groupId>junit</groupId>

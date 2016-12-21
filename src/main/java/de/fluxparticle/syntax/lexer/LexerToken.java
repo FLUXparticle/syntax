@@ -1,6 +1,6 @@
 package de.fluxparticle.syntax.lexer;
 
-import de.fluxparticle.syntax.parser.*;
+import de.fluxparticle.syntax.parser.RuleParser;
 
 /**
  * Created by sreinck on 08.01.16.

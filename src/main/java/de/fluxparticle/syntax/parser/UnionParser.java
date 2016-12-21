@@ -5,8 +5,8 @@ import de.fluxparticle.syntax.lexer.LexerElement;
 import de.fluxparticle.syntax.lexer.ParserException;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Created by sreinck on 05.01.16.
@@ -38,11 +38,10 @@ public class UnionParser extends Parser {
 
     @Override
     public Object check(BaseLexer l) throws ParserException {
-        LexerElement peek = l.peek();
+        AtomicReference<Object> atomicReference = new AtomicReference<>();
         for (Parser p : parsers) {
-            Set<LexerElement> first = p.first();
-            if (first.contains(peek)) {
-                return p.check(l);
+            if (l.with(p, atomicReference::set)) {
+                return atomicReference.get();
             }
         }
 
