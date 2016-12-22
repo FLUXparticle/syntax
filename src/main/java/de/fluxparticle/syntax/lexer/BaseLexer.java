@@ -18,7 +18,7 @@ public abstract class BaseLexer {
 
     public final void require(LexerElement ch) throws ParserException {
         if (!check(ch)) {
-            throw error(singleton(ch));
+            throw exception(singleton(ch));
         }
     }
 
@@ -45,12 +45,12 @@ public abstract class BaseLexer {
 
     protected abstract int pos();
 
-    public ParserException error(Set<LexerElement> expected) throws ParserException {
+    public ParserException exception(Set<LexerElement> expected) throws ParserException {
         return new ParserException(expected, peek(), input(), pos());
     }
 
-    public ParserException error(String message, Throwable cause) {
-        return new ParserException(message, cause, input(), pos());
+    public ParserRuntimeException error(String message, Throwable cause) {
+        return new ParserRuntimeException(message, cause, input(), pos());
     }
 
 }

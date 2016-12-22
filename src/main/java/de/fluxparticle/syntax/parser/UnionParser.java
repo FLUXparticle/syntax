@@ -46,7 +46,7 @@ public class UnionParser extends Parser {
         }
 
         if (!nothing) {
-            throw l.error(first());
+            throw l.exception(first());
         }
 
         return null;

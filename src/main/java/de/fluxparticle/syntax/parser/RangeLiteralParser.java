@@ -40,7 +40,7 @@ public class RangeLiteralParser extends Parser {
             return ch;
         }
 
-        throw l.error(first);
+        throw l.exception(first);
     }
 
 }

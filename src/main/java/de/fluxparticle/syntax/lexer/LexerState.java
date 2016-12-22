@@ -29,4 +29,9 @@ public class LexerState {
         return pos;
     }
 
+    @Override
+    public String toString() {
+        return element.toLexerString();
+    }
+
 }
