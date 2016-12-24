@@ -50,6 +50,11 @@ public class LineLexer extends BaseLexer {
     }
 
     @Override
+    public String getParsedInput() {
+        return input.substring(stack.peek(), pos);
+    }
+
+    @Override
     public String input() {
         return input;
     }

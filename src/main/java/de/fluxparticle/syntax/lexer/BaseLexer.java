@@ -41,6 +41,8 @@ public abstract class BaseLexer {
 
     public abstract void drop();
 
+    public abstract String getParsedInput();
+
     protected abstract String input();
 
     protected abstract int pos();

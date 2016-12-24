@@ -15,10 +15,13 @@ public class TokenParser extends Parser {
 
     private final String name;
 
+    private final RuleParser parser;
+
     private final LexerToken token;
 
     public TokenParser(String name, RuleParser parser) {
         this.name = name;
+        this.parser = parser;
         token = new LexerToken(parser, null);
     }
 
@@ -31,7 +34,7 @@ public class TokenParser extends Parser {
     public Object check(BaseLexer l) throws ParserException {
         LexerElement peek = l.peek();
         l.require(token);
-        return peek;
+        return new LexerToken(parser, peek.toString());
     }
 
 }

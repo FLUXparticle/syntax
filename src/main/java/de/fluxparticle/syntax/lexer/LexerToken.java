@@ -5,7 +5,7 @@ import de.fluxparticle.syntax.parser.RuleParser;
 /**
  * Created by sreinck on 08.01.16.
  */
-public class LexerToken extends LexerElement {
+public class LexerToken extends LexerElement implements Named {
 
     private final RuleParser parser;
 
@@ -80,6 +80,7 @@ public class LexerToken extends LexerElement {
         return 0;
     }
 
+    @Override
     public String getName() {
         return name;
     }
@@ -87,4 +88,5 @@ public class LexerToken extends LexerElement {
     public String getStr() {
         return str;
     }
+
 }

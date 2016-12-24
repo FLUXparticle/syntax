@@ -3,7 +3,7 @@ package de.fluxparticle.syntax.structure;
 /**
  * Created by sreinck on 11.01.16.
  */
-public class MultiLiteral extends SingleElement {
+public class MultiLiteral extends SelectableElement {
 
     private final String literal;
 
@@ -19,6 +19,11 @@ public class MultiLiteral extends SingleElement {
     @Override
     public String toString() {
         return "'" + literal + "'";
+    }
+
+    @Override
+    public String getSelector() {
+        return literal;
     }
 
 }

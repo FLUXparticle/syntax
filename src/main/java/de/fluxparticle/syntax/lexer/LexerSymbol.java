@@ -3,7 +3,7 @@ package de.fluxparticle.syntax.lexer;
 /**
  * Created by sreinck on 08.01.16.
  */
-public class LexerSymbol extends LexerElement {
+public class LexerSymbol extends LexerElement implements Named {
 
     private final char ch;
 
@@ -23,6 +23,11 @@ public class LexerSymbol extends LexerElement {
 
     @Override
     public String toString() {
+        return Character.toString(ch);
+    }
+
+    @Override
+    public String getName() {
         return Character.toString(ch);
     }
 

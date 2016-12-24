@@ -15,19 +15,32 @@ public class RuleParser extends SequenceParser {
 
     private final Function<Object[], Object> reduce;
 
-    public RuleParser(Parser[] parsers, String name, Function<Object[], Object> reduce) {
+    private final boolean inputType;
+
+    public RuleParser(Parser[] parsers, String name, Function<Object[], Object> reduce, boolean inputType) {
         super(parsers);
         this.name = name;
         this.reduce = reduce;
+        this.inputType = inputType;
     }
 
     @Override
     public Object check(BaseLexer l) throws ParserException {
         try {
+            l.push();
             List list = (List) super.check(l);
-            return reduce.apply(list.toArray());
+            Object[] objects;
+            if (inputType) {
+                String str = l.getParsedInput();
+                objects = new Object[] { str.trim() };
+            } else {
+                objects = list.toArray();
+            }
+            return reduce.apply(objects);
         } catch (RuntimeException e) {
             throw l.error("exception in rule " + name, e);
+        } finally {
+            l.drop();
         }
     }
 

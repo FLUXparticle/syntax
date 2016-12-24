@@ -164,6 +164,11 @@ public class Lexer extends BaseLexer {
     }
 
     @Override
+    public String getParsedInput() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     protected String input() {
         return lineLexer != null ? lineLexer.input() : null;
     }

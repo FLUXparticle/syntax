@@ -3,7 +3,7 @@ package de.fluxparticle.syntax.structure;
 /**
  * Created by sreinck on 03.01.16.
  */
-public class Reference extends SingleElement {
+public class Reference extends SelectableElement {
 
     private final String reference;
 
@@ -18,6 +18,11 @@ public class Reference extends SingleElement {
 
     @Override
     public String toString() {
+        return reference;
+    }
+
+    @Override
+    public String getSelector() {
         return reference;
     }
 
