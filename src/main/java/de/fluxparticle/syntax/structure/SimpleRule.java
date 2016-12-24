@@ -40,7 +40,7 @@ public class SimpleRule extends Sequence implements Rule {
 
     @Override
     public Object reduce(Object[] objects) {
-        return objects;
+        return new NamedTree(name, objects);
     }
 
     @Override
