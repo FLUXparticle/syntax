@@ -31,7 +31,13 @@ public interface Rule {
 
     RuleType getRuleType();
 
-    Object reduce(Object[] objects);
+    default Object reduce(Object[] objects) {
+        if (getRuleType() == RuleType.INPUT) {
+            return objects[0];
+        } else {
+            return new NamedTree(name(), objects);
+        }
+    }
 
     SingleElement[] getElements();
 

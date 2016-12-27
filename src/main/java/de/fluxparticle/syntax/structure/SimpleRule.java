@@ -39,15 +39,6 @@ public class SimpleRule extends Sequence implements Rule {
     }
 
     @Override
-    public Object reduce(Object[] objects) {
-        if (type == RuleType.INPUT) {
-            return objects[0];
-        } else {
-            return new NamedTree(name, objects);
-        }
-    }
-
-    @Override
     public SingleElement[] getElements() {
         return elements;
     }
