@@ -45,7 +45,7 @@ public enum BNFSyntax implements Rule {
 
     LITERAL(union(ref("SINGLE_LITERAL"), ref("RANGE_LITERAL"), ref("MULTI_LITERAL"))),
 
-    NAME(rangeLit('A', 'Z'), loopEmpty(union(rangeLit('A', 'Z'), lit('_')))) {
+    NAME(rangeLit('A', 'Z'), loopEmpty(null, union(rangeLit('A', 'Z'), lit('_')))) {
         @Override
         public Object reduce(Object... objects) {
             LexerSymbol head = (LexerSymbol) objects[0];
@@ -141,15 +141,16 @@ public enum BNFSyntax implements Rule {
         public Object reduce(Object... objects) {
             Literal delimiter = (Literal) objects[1];
             Element element = (Element) objects[2];
-            return new Loop(element, delimiter);
+            return new Loop(false, element, delimiter);
         }
     },
 
-    LOOP_EMPTY(lit('*'), ref("ELEMENT")) {
+    LOOP_EMPTY(lit('*'), unionEmpty(ref("SINGLE_LITERAL")), ref("ELEMENT")) {
         @Override
         public Object reduce(Object... objects) {
-            Element element = (Element) objects[1];
-            return new LoopEmpty(element);
+            Literal delimiter = (Literal) objects[1];
+            Element element = (Element) objects[2];
+            return new Loop(true, element, delimiter);
         }
     },
 

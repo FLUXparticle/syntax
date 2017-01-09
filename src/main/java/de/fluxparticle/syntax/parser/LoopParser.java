@@ -16,13 +16,16 @@ import static java.util.function.Function.identity;
  */
 public class LoopParser extends Parser {
 
+    private final boolean empty;
+
     private final Parser p;
 
     private final Parser tailParser;
 
     private final Function<Object, Object> f;
 
-    public LoopParser(Parser p, LiteralParser delimiterParser) {
+    public LoopParser(boolean empty, Parser p, LiteralParser delimiterParser) {
+        this.empty = empty;
         this.p = p;
         if (delimiterParser == null) {
             tailParser = p;
@@ -35,17 +38,22 @@ public class LoopParser extends Parser {
 
     @Override
     Set<LexerElement> first() {
-        return p.first();
+        if (empty) {
+            throw new IllegalArgumentException();
+        } else {
+            return p.first();
+        }
     }
 
     @Override
     public Object check(BaseLexer l) throws ParserException {
         List<Object> objects = new ArrayList<>();
 
-        Object obj = p.check(l);
-        objects.add(obj);
-
-        while (l.with(tailParser, o -> objects.add(f.apply(o))));
+        if (l.with(p, objects::add)) {
+            while (l.with(tailParser, o -> objects.add(f.apply(o)))) ;
+        } else if (!empty) {
+            throw l.exception(first());
+        }
 
         return objects;
     }

@@ -22,17 +22,17 @@ public abstract class Element {
     }
 
     public static  Loop loop(SingleElement element) {
-        return new Loop(element, null);
+        return new Loop(false, element, null);
     }
 
     public static  Loop loop(Literal delimiter, SingleElement... elements) {
         Element element = (elements.length == 1) ? elements[0] : seq(elements);
-        return new Loop(element, delimiter);
+        return new Loop(false, element, delimiter);
     }
 
-    public static  LoopEmpty loopEmpty(SingleElement... elements) {
+    public static  Loop loopEmpty(Literal delimiter, SingleElement... elements) {
         Element element = (elements.length == 1) ? elements[0] : seq(elements);
-        return new LoopEmpty(element);
+        return new Loop(true, element, delimiter);
     }
 
     public static Union optional(Element element) {

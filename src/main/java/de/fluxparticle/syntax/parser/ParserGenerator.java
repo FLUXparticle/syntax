@@ -35,16 +35,10 @@ public class ParserGenerator implements ElementVisitor<Parser, Void> {
     }
 
     @Override
-    public Parser visitLoop(Element element, Literal delimiter, Void data) {
+    public Parser visitLoop(boolean empty, Element element, Literal delimiter, Void data) {
         Parser p = element.accept(this, null);
         LiteralParser delimiterParser = delimiter != null ? (LiteralParser) delimiter.accept(this, null) : null;
-        return new LoopParser(p, delimiterParser);
-    }
-
-    @Override
-    public Parser visitLoopEmpty(Element element, Void data) {
-        Parser p = element.accept(this, null);
-        return new LoopEmptyParser(p);
+        return new LoopParser(empty, p, delimiterParser);
     }
 
     @Override

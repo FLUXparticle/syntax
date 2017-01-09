@@ -35,12 +35,7 @@ public class MultiLiteralFinder implements ElementVisitor<Stream<String>, Void> 
     }
 
     @Override
-    public Stream<String> visitLoop(Element element, Literal delimiter, Void data) {
-        return element.accept(this, data);
-    }
-
-    @Override
-    public Stream<String> visitLoopEmpty(Element element, Void data) {
+    public Stream<String> visitLoop(boolean empty, Element element, Literal delimiter, Void data) {
         return element.accept(this, data);
     }
 
