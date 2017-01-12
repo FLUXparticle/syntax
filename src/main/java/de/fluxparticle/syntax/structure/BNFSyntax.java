@@ -89,21 +89,6 @@ public enum BNFSyntax implements Rule {
         }
     },
 
-    COMMENT(lit('/'), lit('*'), loop(union(rangeLit('a', 'z'), rangeLit('A', 'Z'))), lit('*'), lit('/')) {
-        @Override
-        public Object reduce(Object... objects) {
-            List list = (List) objects[2];
-
-            StringBuilder sb = new StringBuilder("/*");
-            for (Object o : list) {
-                sb.append(o);
-            }
-            sb.append("*/");
-
-            return new Keyword(sb.toString(), KeywordType.COMMENT);
-        }
-    },
-
     REFERENCE(ref("NAME")) {
         @Override
         public Object reduce(Object... objects) {
@@ -154,7 +139,7 @@ public enum BNFSyntax implements Rule {
         }
     },
 
-    TOKEN_ELEMENT(union(ref("LITERAL"), ref("KEYWORD"), ref("WORD"), ref("COMMENT"), ref("OPTIONAL"), ref("UNION"), ref("LOOP"), ref("LOOP_EMPTY"))),
+    TOKEN_ELEMENT(union(ref("LITERAL"), ref("KEYWORD"), ref("WORD"), ref("OPTIONAL"), ref("UNION"), ref("LOOP"), ref("LOOP_EMPTY"))),
 
     SINGLE_ELEMENT(union(ref("TOKEN_ELEMENT"), ref("REFERENCE"))),
 

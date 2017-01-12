@@ -5,6 +5,5 @@ package de.fluxparticle.syntax.structure;
  */
 public enum  KeywordType {
     NORMAL,
-    HIGHLIGHT,
-    COMMENT
+    HIGHLIGHT
 }
