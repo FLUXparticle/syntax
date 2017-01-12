@@ -28,7 +28,16 @@ public class RuleParser extends SequenceParser {
     public Object check(BaseLexer l) throws ParserException {
         try {
             l.push();
-            List list = (List) super.check(l);
+            List list;
+            try {
+                list = (List) super.check(l);
+            } catch (ParserException e) {
+                if (inputType) {
+                    list = null;
+                } else {
+                    throw e;
+                }
+            }
             Object[] objects;
             if (inputType) {
                 String str = l.getParsedInput();

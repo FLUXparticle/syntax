@@ -40,4 +40,12 @@ public class Union extends SingleElement {
         return sb.toString();
     }
 
+    public boolean getNothing() {
+        return nothing;
+    }
+
+    public Element[] getElements() {
+        return elements;
+    }
+
 }

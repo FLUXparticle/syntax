@@ -58,7 +58,7 @@ public class ChainLexer extends BaseLexer {
         StringWriter writer = new StringWriter();
         PrintWriter out = new PrintWriter(writer);
 
-        do {
+        while (cur != chain) {
             Chain<LexerState> next = cur.tail();
             String newLine = next.head().getInput();
             if (newLine != line) {
@@ -69,7 +69,7 @@ public class ChainLexer extends BaseLexer {
                 out.print(line.substring(cur.head().getPos(), next.head().getPos()));
             }
             cur = next;
-        } while (cur != chain);
+        }
 
         return writer.toString();
     }
