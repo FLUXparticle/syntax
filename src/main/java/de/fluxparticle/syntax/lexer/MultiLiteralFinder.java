@@ -35,7 +35,7 @@ public class MultiLiteralFinder implements ElementVisitor<Stream<String>, Void> 
     }
 
     @Override
-    public Stream<String> visitLoop(boolean empty, Element element, Literal delimiter, Void data) {
+    public Stream<String> visitLoop(Loop.LoopType empty, Element element, Literal delimiter, Void data) {
         return element.accept(this, data);
     }
 
@@ -60,7 +60,7 @@ public class MultiLiteralFinder implements ElementVisitor<Stream<String>, Void> 
     }
 
     @Override
-    public Stream<String> visitUnion(boolean nothing, Element[] elements, Void data) {
+    public Stream<String> visitUnion(Element[] elements, Void data) {
         return of(elements).flatMap(element -> element.accept(this, data));
     }
 

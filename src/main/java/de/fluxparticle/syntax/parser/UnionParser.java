@@ -13,24 +13,17 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class UnionParser extends Parser {
 
-    private final boolean nothing;
-
     private final Parser[] parsers;
 
     private Set<LexerElement> first;
 
-    public UnionParser(boolean nothing, Parser... parsers) {
-        this.nothing = nothing;
+    public UnionParser(Parser... parsers) {
         this.parsers = parsers;
     }
 
     @Override
     Set<LexerElement> first() {
         if (first == null) {
-            if (nothing) {
-                throw new IllegalArgumentException();
-            }
-
             first = calcFirst();
         }
         return first;
@@ -42,17 +35,16 @@ public class UnionParser extends Parser {
         for (Parser p : parsers) {
             if (l.with(p, atomicReference::set)) {
                 Object obj = atomicReference.get();
-                if (!(obj instanceof String && ((String) obj).isEmpty())) {
-                    return obj;
+
+                if (obj instanceof String && ((String) obj).isEmpty()) {
+                    continue;
                 }
+
+                return obj;
             }
         }
 
-        if (!nothing) {
-            throw l.exception(first());
-        }
-
-        return null;
+        throw l.exception(first());
     }
 
     private Set<LexerElement> calcFirst() {

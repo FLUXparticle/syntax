@@ -1,6 +1,7 @@
 package de.fluxparticle.syntax.parser;
 
 import de.fluxparticle.syntax.structure.*;
+import de.fluxparticle.syntax.structure.Loop.LoopType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,10 +36,10 @@ public class ParserGenerator implements ElementVisitor<Parser, Void> {
     }
 
     @Override
-    public Parser visitLoop(boolean empty, Element element, Literal delimiter, Void data) {
+    public Parser visitLoop(LoopType type, Element element, Literal delimiter, Void data) {
         Parser p = element.accept(this, null);
         LiteralParser delimiterParser = delimiter != null ? (LiteralParser) delimiter.accept(this, null) : null;
-        return new LoopParser(empty, p, delimiterParser);
+        return new LoopParser(type, p, delimiterParser);
     }
 
     @Override
@@ -74,8 +75,8 @@ public class ParserGenerator implements ElementVisitor<Parser, Void> {
     }
 
     @Override
-    public Parser visitUnion(boolean nothing, Element[] elements, Void data) {
-        return new UnionParser(nothing, parsers(elements));
+    public Parser visitUnion(Element[] elements, Void data) {
+        return new UnionParser(parsers(elements));
     }
 
     private Parser[] parsers(Element[] elements) {

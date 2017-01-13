@@ -3,6 +3,7 @@ package de.fluxparticle.syntax.parser;
 import de.fluxparticle.syntax.lexer.BaseLexer;
 import de.fluxparticle.syntax.lexer.LexerElement;
 import de.fluxparticle.syntax.lexer.ParserException;
+import de.fluxparticle.syntax.structure.Loop.LoopType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ import static java.util.function.Function.identity;
  */
 public class LoopParser extends Parser {
 
-    private final boolean empty;
+    private final LoopType type;
 
     private final Parser p;
 
@@ -24,8 +25,8 @@ public class LoopParser extends Parser {
 
     private final Function<Object, Object> f;
 
-    public LoopParser(boolean empty, Parser p, LiteralParser delimiterParser) {
-        this.empty = empty;
+    public LoopParser(LoopType type, Parser p, LiteralParser delimiterParser) {
+        this.type = type;
         this.p = p;
         if (delimiterParser == null) {
             tailParser = p;
@@ -38,10 +39,10 @@ public class LoopParser extends Parser {
 
     @Override
     Set<LexerElement> first() {
-        if (empty) {
-            throw new IllegalArgumentException();
-        } else {
+        if (type == LoopType.SOME) {
             return p.first();
+        } else {
+            throw new IllegalArgumentException();
         }
     }
 
@@ -50,18 +51,18 @@ public class LoopParser extends Parser {
         List<Object> objects = new ArrayList<>();
 
         if (l.with(p, objects::add)) {
-            while (l.with(tailParser, o -> objects.add(f.apply(o)))) ;
-        } else if (!empty) {
+            if (type != LoopType.ONE) {
+                while (l.with(tailParser, o -> objects.add(f.apply(o))));
+            }
+        } else if (type == LoopType.SOME) {
             throw l.exception(first());
         }
 
         if (objects.size() == 1) {
             Object o = objects.get(0);
             if (o instanceof String && ((String) o).isEmpty()) {
-                if (empty) {
+                if (type != LoopType.SOME) {
                     objects.clear();
-                } else {
-                    throw l.exception(first());
                 }
             }
         }

@@ -5,18 +5,15 @@ package de.fluxparticle.syntax.structure;
  */
 public class Union extends SingleElement {
 
-    private final boolean nothing;
-
     private final Element[] elements;
 
-    public Union(boolean nothing, Element... elements) {
-        this.nothing = nothing;
+    public Union(Element... elements) {
         this.elements = elements;
     }
 
     @Override
     public <R, D> R accept(ElementVisitor<R, D> visitor, D data) {
-        return visitor.visitUnion(nothing, elements, data);
+        return visitor.visitUnion(elements, data);
     }
 
     @Override
@@ -28,7 +25,7 @@ public class Union extends SingleElement {
             sb.append(elements[0]);
         } else {
             sb.append("(");
-            String delimiter = nothing ? "|" : "";
+            String delimiter = "";
             for (Element element : elements) {
                 sb.append(delimiter);
                 sb.append(element);
@@ -38,10 +35,6 @@ public class Union extends SingleElement {
         }
 
         return sb.toString();
-    }
-
-    public boolean getNothing() {
-        return nothing;
     }
 
     public Element[] getElements() {

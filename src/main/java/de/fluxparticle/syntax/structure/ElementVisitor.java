@@ -1,5 +1,7 @@
 package de.fluxparticle.syntax.structure;
 
+import de.fluxparticle.syntax.structure.Loop.LoopType;
+
 import java.util.function.Function;
 
 /**
@@ -15,7 +17,7 @@ public interface ElementVisitor<R, D> {
 
     R visitRangeLiteral(char from, char to, D data);
 
-    R visitLoop(boolean empty, Element element, Literal delimiter, D data);
+    R visitLoop(LoopType type, Element element, Literal delimiter, D data);
 
     R visitReference(String reference, D data);
 
@@ -27,6 +29,6 @@ public interface ElementVisitor<R, D> {
 
     R visitSpecial(Special.Item item, D data);
 
-    R visitUnion(boolean nothing, Element[] elements, D data);
+    R visitUnion(Element[] elements, D data);
 
 }

@@ -1,5 +1,7 @@
 package de.fluxparticle.syntax.structure;
 
+import de.fluxparticle.syntax.structure.Loop.LoopType;
+
 /**
  * Created by sreinck on 03.01.16.
  */
@@ -22,29 +24,25 @@ public abstract class Element {
     }
 
     public static  Loop loop(SingleElement element) {
-        return new Loop(false, element, null);
+        return new Loop(LoopType.SOME, element, null);
     }
 
     public static  Loop loop(Literal delimiter, SingleElement... elements) {
         Element element = (elements.length == 1) ? elements[0] : seq(elements);
-        return new Loop(false, element, delimiter);
+        return new Loop(LoopType.SOME, element, delimiter);
     }
 
     public static  Loop loopEmpty(Literal delimiter, SingleElement... elements) {
         Element element = (elements.length == 1) ? elements[0] : seq(elements);
-        return new Loop(true, element, delimiter);
+        return new Loop(LoopType.ANY, element, delimiter);
     }
 
-    public static Union optional(Element element) {
-        return new Union(true, element);
-    }
-
-    public static  Union unionEmpty(Element... elements) {
-        return new Union(true, elements);
+    public static Loop optional(Element element) {
+        return new Loop(LoopType.ONE, element, null);
     }
 
     public static  Union union(Element... elements) {
-        return new Union(false, elements);
+        return new Union(elements);
     }
 
     public abstract <R, D> R accept(ElementVisitor<R, D> visitor, D data);

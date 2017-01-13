@@ -1,7 +1,7 @@
 package de.fluxparticle.syntax.structure;
 
-import de.fluxparticle.syntax.lexer.LexerElement;
 import de.fluxparticle.syntax.lexer.LexerSymbol;
+import de.fluxparticle.syntax.structure.Loop.LoopType;
 
 import java.util.List;
 
@@ -96,20 +96,10 @@ public enum BNFSyntax implements Rule {
         }
     },
 
-    OPTIONAL(lit('?'), ref("ELEMENT")) {
+    UNION(lit('('), loop(lit('|'), ref("ELEMENT")), lit(')')) {
         @Override
         public Object reduce(Object... objects) {
-            Element element = (Element) objects[1];
-            return new Union(true, element);
-        }
-    },
-
-    UNION(lit('('), unionEmpty(lit('|')), loop(lit('|'), ref("ELEMENT")), lit(')')) {
-        @Override
-        public Object reduce(Object... objects) {
-            LexerElement first = (LexerElement) objects[1];
-            List loop = (List) objects[2];
-            boolean nothing = first != null;
+            List loop = (List) objects[1];
             Element[] elements = new Element[loop.size()];
             int i = 0;
 
@@ -117,25 +107,33 @@ public enum BNFSyntax implements Rule {
                 elements[i++] = (Element) obj;
             }
 
-            return new Union(nothing, elements);
+            return new Union(elements);
         }
     },
 
-    LOOP(lit('+'), unionEmpty(ref("SINGLE_LITERAL")), ref("ELEMENT")) {
+    OPTIONAL(lit('?'), ref("ELEMENT")) {
         @Override
         public Object reduce(Object... objects) {
-            Literal delimiter = (Literal) objects[1];
-            Element element = (Element) objects[2];
-            return new Loop(false, element, delimiter);
+            Element element = (Element) objects[1];
+            return new Loop(LoopType.ONE, element, null);
         }
     },
 
-    LOOP_EMPTY(lit('*'), unionEmpty(ref("SINGLE_LITERAL")), ref("ELEMENT")) {
+    LOOP(lit('+'), optional(union(ref("SINGLE_LITERAL"))), ref("ELEMENT")) {
         @Override
         public Object reduce(Object... objects) {
-            Literal delimiter = (Literal) objects[1];
+            Literal delimiter = fromOptional(objects[1]);
             Element element = (Element) objects[2];
-            return new Loop(true, element, delimiter);
+            return new Loop(LoopType.SOME, element, delimiter);
+        }
+    },
+
+    LOOP_EMPTY(lit('*'), optional(union(ref("SINGLE_LITERAL"))), ref("ELEMENT")) {
+        @Override
+        public Object reduce(Object... objects) {
+            Literal delimiter = fromOptional(objects[1]);
+            Element element = (Element) objects[2];
+            return new Loop(LoopType.ANY, element, delimiter);
         }
     },
 
@@ -180,13 +178,12 @@ public enum BNFSyntax implements Rule {
         }
     },
 
-    // TODO optional Display-Name
     RULE(ref("NAME"), optional(seq(lit('('), loop(union(rangeLit('a', 'z'), rangeLit('A', 'Z'), lit(' '))), lit(')'))), lit(' '), lit(':'), lit('='), lit(' '), optional(seq(union(ref("TOKEN"), ref("ANCHOR"), ref("INPUT")), lit(' '))), loop(lit(' '), ref("SINGLE_ELEMENT")), lit(';')) {
         @Override
         public Object reduce(Object... objects) {
             String name = (String) objects[0];
 
-            List displayNameList = (List) objects[1];
+            List displayNameList = fromOptional(objects[1]);
             StringBuilder displayName = new StringBuilder();
             if (displayNameList == null) {
                 displayName.append(name);
@@ -197,7 +194,7 @@ public enum BNFSyntax implements Rule {
                 }
             }
 
-            List ruleTypeList = (List) objects[6];
+            List ruleTypeList = fromOptional(objects[6]);
             RuleType type = ruleTypeList != null ? (RuleType) ruleTypeList.get(0) : RuleType.SIMPLE;
 
             List list = (List) objects[7];
@@ -209,6 +206,12 @@ public enum BNFSyntax implements Rule {
             return new SimpleRule(name, displayName.toString(), type, elements);
         }
     };
+
+    @SuppressWarnings("unchecked")
+    private static <T> T fromOptional(Object object) {
+        List<T> list = (List<T>) object;
+        return list.isEmpty() ? null : list.get(0);
+    }
 
     public static final Syntax BNF_SYNTAX = new EnumSyntax(BNFSyntax.class);
 
