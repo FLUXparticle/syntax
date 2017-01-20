@@ -58,15 +58,6 @@ public class LoopParser extends Parser {
             throw l.exception(first());
         }
 
-        if (objects.size() == 1) {
-            Object o = objects.get(0);
-            if (o instanceof String && ((String) o).isEmpty()) {
-                if (type != LoopType.SOME) {
-                    objects.clear();
-                }
-            }
-        }
-
         return objects;
     }
 

@@ -2,6 +2,8 @@ package de.fluxparticle.syntax.lexer;
 
 import de.fluxparticle.syntax.parser.RuleParser;
 
+import static de.fluxparticle.syntax.lexer.MultiLiteralFinder.undefinedToken;
+
 /**
  * Created by sreinck on 08.01.16.
  */
@@ -16,7 +18,7 @@ public class LexerToken extends LexerElement implements Named {
     public LexerToken(RuleParser parser, String str) {
         this.parser = parser;
         this.name = parser != null ? parser.getName() : null;
-        this.str = str;
+        this.str = undefinedToken(name).equals(str) ? "" : str;
     }
 
     @Override
@@ -56,15 +58,15 @@ public class LexerToken extends LexerElement implements Named {
         if (str != null && other.str != null) {
             return str.equals(other.str);
         } else if (str != null) {
-            return check(other.parser, this.str);
+            return undefinedToken(other.name).equals(this.str) || check(other.parser, this.str);
         } else if (other.str != null) {
-            return check(this.parser, other.str);
+            return undefinedToken(this.name).equals(other.str) || check(this.parser, other.str);
         }
 
         return equalNames;
     }
 
-    private boolean check(RuleParser parser, String str) {
+    private static boolean check(RuleParser parser, String str) {
         try {
             LineLexer l = new LineLexer(str);
             parser.check(l);

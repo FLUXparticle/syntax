@@ -7,14 +7,13 @@ import de.fluxparticle.utils.chain.LazyChain;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import static de.fluxparticle.utils.chain.Chain.emptyChain;
 import static java.util.Comparator.comparing;
-import static java.util.Comparator.naturalOrder;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Created by sreinck on 05.01.16.
@@ -25,7 +24,7 @@ public class Lexer extends BaseLexer {
 
     private final BufferedReader reader;
 
-    private final SortedSet<String> literals;
+    private final List<String> literals;
 
     private final RuleParser[] tokenParsers;
 
@@ -37,10 +36,8 @@ public class Lexer extends BaseLexer {
 
     public Lexer(BufferedReader reader, Set<String> literals, RuleParser... tokenParsers) {
         this.reader = reader;
-        this.literals = new TreeSet<>(comparing(String::length).reversed().thenComparing(naturalOrder()));
+        this.literals = literals.stream().sorted(comparing(String::length).reversed()).collect(toList());
         this.tokenParsers = tokenParsers;
-
-        this.literals.addAll(literals);
 
         nextLine();
     }

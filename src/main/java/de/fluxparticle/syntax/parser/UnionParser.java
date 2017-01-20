@@ -34,13 +34,7 @@ public class UnionParser extends Parser {
         AtomicReference<Object> atomicReference = new AtomicReference<>();
         for (Parser p : parsers) {
             if (l.with(p, atomicReference::set)) {
-                Object obj = atomicReference.get();
-
-                if (obj instanceof String && ((String) obj).isEmpty()) {
-                    continue;
-                }
-
-                return obj;
+                return atomicReference.get();
             }
         }
 

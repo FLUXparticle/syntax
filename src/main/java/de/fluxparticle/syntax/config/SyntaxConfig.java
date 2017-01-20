@@ -38,7 +38,7 @@ public class SyntaxConfig {
                 .collect(toMap(Rule::name, identity()));
         parserMap = syntax.acceptAll(new ParserGenerator(), null);
         literals = syntax.acceptAll(new MultiLiteralFinder(), null).values().stream()
-                .flatMap(identity())
+                .flatMap(Chain::asStream)
                 .collect(toSet());
         tokenParsers = syntax.getRules().stream()
                 .filter(rule -> rule.getRuleType() == RuleType.TOKEN)
