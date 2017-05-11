@@ -6,6 +6,7 @@ import de.fluxparticle.syntax.parser.Lexer;
 import de.fluxparticle.syntax.parser.Parser;
 import de.fluxparticle.syntax.parser.ParserGenerator;
 import de.fluxparticle.syntax.parser.RuleParser;
+import de.fluxparticle.syntax.structure.ElementVisitor;
 import de.fluxparticle.syntax.structure.Rule;
 import de.fluxparticle.syntax.structure.RuleType;
 import de.fluxparticle.syntax.structure.Syntax;
@@ -25,6 +26,8 @@ import static java.util.stream.Collectors.toSet;
  */
 public class SyntaxConfig {
 
+    private final Syntax syntax;
+
     private final Map<String, Rule> ruleMap;
 
     private final Map<String, Parser> parserMap;
@@ -34,6 +37,7 @@ public class SyntaxConfig {
     private final RuleParser[] tokenParsers;
 
     public SyntaxConfig(Syntax syntax) {
+        this.syntax = syntax;
         ruleMap = syntax.getRules().stream()
                 .collect(toMap(Rule::name, identity()));
         parserMap = syntax.acceptAll(new ParserGenerator(), null);
@@ -63,6 +67,10 @@ public class SyntaxConfig {
         }
         Lexer lexer = new Lexer(bufferedReader, literals, tokenParsers);
         return new ChainLexer(lexer);
+    }
+
+    public <R, D> Map<String, R> acceptAll(ElementVisitor<R, D> visitor, D data) {
+        return syntax.acceptAll(visitor, data);
     }
 
 }
