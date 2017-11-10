@@ -99,6 +99,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <distributionManagement>
+        <snapshotRepository>
+            <id>fluxrepository</id>
+            <url>https://fluxrepository.appspot.com/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <build>
         <plugins>
 
