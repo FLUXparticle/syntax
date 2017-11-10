@@ -6,6 +6,7 @@ import de.fluxparticle.syntax.lexer.ParserException;
 import de.fluxparticle.syntax.structure.Loop.LoopType;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
@@ -44,6 +45,14 @@ public class LoopParser extends Parser {
         } else {
             throw new IllegalArgumentException();
         }
+    }
+
+    @Override
+    public Set<Character> chars() {
+        Set<Character> chars = new HashSet<>();
+        chars.addAll(p.chars());
+        chars.addAll(tailParser.chars());
+        return chars;
     }
 
     @Override

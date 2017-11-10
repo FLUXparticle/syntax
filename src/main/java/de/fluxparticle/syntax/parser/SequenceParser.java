@@ -5,6 +5,7 @@ import de.fluxparticle.syntax.lexer.LexerElement;
 import de.fluxparticle.syntax.lexer.ParserException;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -22,6 +23,15 @@ public class SequenceParser extends Parser {
     @Override
     Set<LexerElement> first() {
         return parsers[0].first();
+    }
+
+    @Override
+    public Set<Character> chars() {
+        Set<Character> chars = new HashSet<>();
+        for (Parser parser : parsers) {
+            chars.addAll(parser.chars());
+        }
+        return chars;
     }
 
     @Override

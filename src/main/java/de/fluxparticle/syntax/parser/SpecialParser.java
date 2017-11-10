@@ -7,6 +7,8 @@ import de.fluxparticle.syntax.structure.Special;
 
 import java.util.Set;
 
+import static java.util.Collections.emptySet;
+
 /**
  * Created by sreinck on 25.06.16.
  */
@@ -21,6 +23,11 @@ public class SpecialParser extends Parser {
     @Override
     Set<LexerElement> first() {
         throw new IllegalArgumentException();
+    }
+
+    @Override
+    public Set<Character> chars() {
+        return emptySet();
     }
 
     @Override

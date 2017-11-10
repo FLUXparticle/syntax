@@ -1,6 +1,9 @@
 package de.fluxparticle.syntax.parser;
 
-import de.fluxparticle.syntax.lexer.*;
+import de.fluxparticle.syntax.lexer.BaseLexer;
+import de.fluxparticle.syntax.lexer.LexerElement;
+import de.fluxparticle.syntax.lexer.LexerSymbol;
+import de.fluxparticle.syntax.lexer.ParserException;
 
 import java.util.Collections;
 import java.util.Set;
@@ -19,6 +22,11 @@ public class LiteralParser extends Parser {
     @Override
     Set<LexerElement> first() {
         return Collections.singleton(lexerSymbol);
+    }
+
+    @Override
+    public Set<Character> chars() {
+        return Collections.singleton(lexerSymbol.getSymbol());
     }
 
     @Override

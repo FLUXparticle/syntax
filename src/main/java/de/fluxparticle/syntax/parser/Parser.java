@@ -13,6 +13,8 @@ public abstract class Parser {
 
     abstract Set<LexerElement> first();
 
+    public abstract Set<Character> chars();
+
     public abstract Object check(BaseLexer l) throws ParserException;
 
 }

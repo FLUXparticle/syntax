@@ -33,6 +33,11 @@ public class RangeLiteralParser extends Parser {
     }
 
     @Override
+    public Set<Character> chars() {
+        return first.stream().map(lexerElement -> ((LexerSymbol) lexerElement).getSymbol()).collect(toSet());
+    }
+
+    @Override
     public Object check(BaseLexer l) throws ParserException {
         LexerElement ch = l.peek();
         if (first().contains(ch)) {

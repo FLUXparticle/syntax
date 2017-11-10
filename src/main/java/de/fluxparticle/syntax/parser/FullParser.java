@@ -24,6 +24,11 @@ public class FullParser extends Parser {
     }
 
     @Override
+    public Set<Character> chars() {
+        return parser.chars();
+    }
+
+    @Override
     public Object check(BaseLexer l) throws ParserException {
         Object result = parser.check(l);
 

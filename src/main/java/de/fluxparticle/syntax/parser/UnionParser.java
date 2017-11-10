@@ -30,6 +30,15 @@ public class UnionParser extends Parser {
     }
 
     @Override
+    public Set<Character> chars() {
+        Set<Character> chars = new HashSet<>();
+        for (Parser parser : parsers) {
+            chars.addAll(parser.chars());
+        }
+        return chars;
+    }
+
+    @Override
     public Object check(BaseLexer l) throws ParserException {
         AtomicReference<Object> atomicReference = new AtomicReference<>();
         for (Parser p : parsers) {

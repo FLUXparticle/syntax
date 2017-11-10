@@ -4,6 +4,7 @@ import de.fluxparticle.syntax.lexer.BaseLexer;
 import de.fluxparticle.syntax.lexer.LexerElement;
 import de.fluxparticle.syntax.lexer.ParserException;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -16,6 +17,8 @@ public class ReferenceParser extends Parser {
 
     private Parser parser;
 
+    private Set<Character> chars;
+
     public ReferenceParser(Supplier<Parser> parserSupplier) {
         this.parserSupplier = parserSupplier;
     }
@@ -23,6 +26,15 @@ public class ReferenceParser extends Parser {
     @Override
     Set<LexerElement> first() {
         return getParser().first();
+    }
+
+    @Override
+    public Set<Character> chars() {
+        if (chars == null) {
+            chars = new HashSet<>();
+            chars.addAll(getParser().chars());
+        }
+        return chars;
     }
 
     @Override

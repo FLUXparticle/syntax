@@ -31,6 +31,11 @@ public class TokenParser extends Parser {
     }
 
     @Override
+    public Set<Character> chars() {
+        return parser.chars();
+    }
+
+    @Override
     public Object check(BaseLexer l) throws ParserException {
         LexerElement peek = l.peek();
         l.require(token);
