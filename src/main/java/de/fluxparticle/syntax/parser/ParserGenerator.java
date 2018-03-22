@@ -13,7 +13,17 @@ import java.util.stream.Stream;
  */
 public class ParserGenerator implements ElementVisitor<Parser, Void> {
 
+    private final boolean forceTree;
+
     private final Map<String, Parser> parserMap = new HashMap<>();
+
+    public ParserGenerator() {
+        this(false);
+    }
+
+    public ParserGenerator(boolean forceTree) {
+        this.forceTree = forceTree;
+    }
 
     @Override
     public Parser visitLiteral(char literal, Void data) {
@@ -49,7 +59,7 @@ public class ParserGenerator implements ElementVisitor<Parser, Void> {
 
     @Override
     public Parser visitRule(String name, RuleType ruleType, Function<Object[], Object> reduce, SingleElement[] elements, Void data) {
-        RuleParser p = new RuleParser(parsers(elements), name, reduce, ruleType == RuleType.INPUT);
+        RuleParser p = new RuleParser(parsers(elements), name, forceTree ? objects -> new NamedTree(name, objects) : reduce, ruleType == RuleType.INPUT && !forceTree);
         switch (ruleType) {
             case TOKEN:
                 TokenParser t = new TokenParser(name, p);

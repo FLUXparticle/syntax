@@ -16,4 +16,8 @@ public class EnumSyntaxConfig<E extends Enum<E>> extends SyntaxConfig {
         return getParser(rule.name());
     }
 
+    public Parser getTreeParser(E rule) {
+        return getTreeParser(rule.name());
+    }
+
 }

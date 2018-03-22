@@ -32,6 +32,8 @@ public class SyntaxConfig {
 
     private final Map<String, Parser> parserMap;
 
+    private final Map<String, Parser> treeParserMap;
+
     private final Set<String> literals;
 
     private final RuleParser[] tokenParsers;
@@ -40,7 +42,8 @@ public class SyntaxConfig {
         this.syntax = syntax;
         ruleMap = syntax.getRules().stream()
                 .collect(toMap(Rule::name, identity()));
-        parserMap = syntax.acceptAll(new ParserGenerator(), null);
+        parserMap = syntax.acceptAll(new ParserGenerator(false), null);
+        treeParserMap = syntax.acceptAll(new ParserGenerator(true), null);
         literals = syntax.acceptAll(new MultiLiteralFinder(), null).values().stream()
                 .flatMap(Chain::asStream)
                 .collect(toSet());
@@ -56,6 +59,10 @@ public class SyntaxConfig {
 
     public Parser getParser(String ruleName) {
         return parserMap.get(ruleName);
+    }
+
+    public Parser getTreeParser(String ruleName) {
+        return treeParserMap.get(ruleName);
     }
 
     public ChainLexer newLexer(Reader reader) {
